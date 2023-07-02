@@ -1,0 +1,32 @@
+<!-- <template>
+  <div id="baseEditor"></div>
+</template>
+
+<script setup lang="ts">
+import wangEditor from './wangEditor'
+import { nextTick } from 'vue'
+
+interface Props {
+  height?: number
+  modelValue?: string
+  uploadImgServer?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  height: 600,
+  modelValue: '12',
+  uploadImgServer: '/api/upload/image',
+})
+
+const emit = defineEmits(['update:modelValue'])
+nextTick(() => {
+  new wangEditor(
+    '#baseEditor',
+    (newHtml: string) => {
+      emit('update:modelValue', newHtml)
+    },
+    props,
+  )
+})
+</script>
+
+<style scoped></style> -->

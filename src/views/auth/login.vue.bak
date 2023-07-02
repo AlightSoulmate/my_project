@@ -1,0 +1,76 @@
+<template>
+  <Form class @submit="onSubmit" :validation-schema="schema" #default="{errors}">
+    <div class="w-[720px] bg-white  md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
+      <div class="p-6 flex flex-col justify-between">
+        <div>
+          <h2 class="text-center text-gray-700 text-lg">会员登陆</h2>
+          <div class="mt-8">
+            <Field name="account" as="input" :rules="{ required: true, email: true }" class="y_input" label="账号">
+            </Field>
+            <div v-if="errors.account" class="y_error">请输入邮箱或手机号</div>
+            <Field name="password" as="input" :rules="{ required: true, min: 6 }" class="y_input mt-4" label="密码"
+              type="password"></Field>
+            <ErrorMessage name="password" as="div" class="y_error mt-4"></ErrorMessage>
+          </div>
+          <YButton class="w-full"></YButton>
+          <div class="flex justify-center mt-3">
+            <!-- <i class="fab fa-weixin bg-green-600 text-white rounded-full p-1 cursor-pointer" aria-hidden="true"></i> -->
+            <icon-wechat theme="outline" size="24" fill="#fff" class=" bg-green-600 text-white rounded-full p-1 cursor-pointer" aria-hidden="true"/>
+          </div>
+        </div>
+        <div class="flex gap-3 justify-center mt-10">
+          <y-link :y_title="loginData.home"></y-link>
+          <y-link :y_title="loginData.password"></y-link>
+          <y-link :y_title="loginData.register"></y-link>
+        </div>
+      </div>
+      <div class="hidden md:block relative">
+        <img src="/images/login.jpg" class="absolute h-full w-full object-cover">
+      </div>
+    </div>
+  </Form>
+</template>
+
+<script setup lang="ts">
+import v from '../../plugins/validate'
+import { reactive } from 'vue'
+import {login} from '../../utils/user'
+const { Form, Field, ErrorMessage } = v
+const onSubmit = async (values: any) => {
+  login(values)
+}
+
+const schema = v.yup.object({
+  account: v.yup.string().required().email().label('账号'),
+  password: v.yup.string().required().label('密码')
+})
+
+
+const loginData = reactive({
+  home: 'Home',
+  password: 'Password',
+  register: 'Register',
+
+  _account: '123',
+  _password: ''
+
+})
+</script>
+
+<style lang="scss">
+form {
+  @apply bg-slate-300 h-screen flex justify-center items-start md:items-center p-5;
+}
+</style>
+
+<script lang="ts">
+export default {
+  route: {
+    name: 'login',
+    meta:{
+      guest:true
+    }
+
+  }
+}
+</script>

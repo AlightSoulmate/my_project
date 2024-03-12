@@ -13,6 +13,7 @@ export default class Axios {
     this.interceptorsRequest()
     this.interceptorsResponse()
   }
+
   public async request<T, D = ResponseResult<T>>(config: AxiosRequestConfig) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -26,9 +27,8 @@ export default class Axios {
   private interceptorsRequest() {
     this.instance.interceptors.request.use(
       (config) => {
-        config.headers.Authorization =
+        config.headers!.Authorization =
           'Bearer' + store.get(CacheEnum.TOKEN_NAME)
-
         return config
       },
       (error) => {

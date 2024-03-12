@@ -56,28 +56,26 @@
         </div>
       </template>
     </el-drawer>
-    <!-- <button
+    <Config
+      theme="outline"
+      size="28"
+      fill="#686de0"
+      class="cursor-pointer"
       @click="toggleDrawerShow"
-      class="absolute left-0 bottom-0 transition-[.3s] bg-green-200 border-none hover:bg-green-300 px-5 py-3 rounded-full"
-    >
-      调整配置
-    </button> -->
-
-    <!-- <el-button type="p" size="default" @click="toggleDrawerShow"
-      >Send to Backend</el-button
-    > -->
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElNotification } from "element-plus";
 import { defineEmits } from "vue";
-const { isConfigShow } = defineProps(["isConfigShow"]);
-console.log(isConfigShow);
+import { Config } from "@icon-park/vue-next";
 
 const emit = defineEmits(["getConfig"]);
 
-// const toggleDrawerShow = () => {};
+const toggleDrawerShow = () => {
+  isDrawerShow.value = !isDrawerShow.value;
+};
 
 const isDrawerShow = ref(false);
 const stream = ref(false);
@@ -102,14 +100,6 @@ const top_pMark = reactive({
   0.6: "适中",
   0.8: "文本更加生动",
 });
-watch(
-  () => isConfigShow,
-  (value, oldValue) => {
-    console.log('value',value)
-    console.log(isConfigShow);
-    isDrawerShow.value = value;
-  }
-);
 
 /**
  * 发送配置数据到父组件

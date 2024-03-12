@@ -4,7 +4,10 @@ const routes = [
   {
     path: '/llm',
     name: 'llm',
-    component: () => import('@/views/llm/dev.vue')
+    component: () => import('@/views/llm/dev.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/',

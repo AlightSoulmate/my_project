@@ -1,6 +1,8 @@
 import { RouteLocationNormalized, Router } from "vue-router"
 import { CacheEnum } from "../enum/cacheEnum"
 import util from "../utils"
+import userStore from "@/store/userStore"
+import utils from "../utils"
 
 class Guard {
   constructor(private router: Router) { }
@@ -10,22 +12,20 @@ class Guard {
   private token(): string | null{
     return util.store.get(CacheEnum.TOKEN_NAME)
   }
-  // private getUserInfo(){
-    // if (this.token()) return userStore().getUserInfo()
-  // }
-  //登陆用户访问
-  // private isLogin(route: RouteLocationNormalized): boolean {
-  //   const state =  Boolean(!route.meta.auth || (route.meta.auth && this.token()))
-  //   if (state === false){
-  //     utils.store.set(CacheEnum.REDIRECT_ROUTE_NAME,route.name)
-  //   }
-  //   return state
+  private getUserInfo(){
+    if (this.token()) return userStore().getUserInfo()
+  }
+  private isLogin(route: RouteLocationNormalized): boolean {
+    const state =  Boolean(!route.meta.auth || (route.meta.auth && this.token()))
+    if (state === false){
+      utils.store.set(CacheEnum.REDIRECT_ROUTE_NAME,route.name)
+    }
+    return state
 
-  // }
-  //游客
-  // private isGuest(route: RouteLocationNormalized): boolean {
-  //   return Boolean(!route.meta.guest || (route.meta.guest && !this.token()))
-  // }
+  }
+  private isGuest(route: RouteLocationNormalized): boolean {
+    return Boolean(!route.meta.guest || (route.meta.guest && !this.token()))
+  }
 
   private async beforeEach(to:RouteLocationNormalized,from:RouteLocationNormalized) {
     // if (this.isLogin(to) == false) return {name:'login'}

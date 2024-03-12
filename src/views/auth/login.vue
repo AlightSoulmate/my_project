@@ -5,7 +5,7 @@
     >
       <div class="p-6 flex flex-col justify-between">
         <div>
-          <h2 class="text-center text-gray-700 text-lg">会员登陆</h2>
+          <h2 class="text-center text-gray-700 text-lg">用户登陆</h2>
           <div class="mt-8">
             <yInput v-model="values.account"></yInput>
             <Error :error="errors.account"></Error>
@@ -40,27 +40,48 @@
 </template>
 
 <script setup lang="ts">
-import Error from '@/components/y/error.vue'
-import v from '../../plugins/validate'
-import { login } from '../../utils/user'
-const { useForm, useFields, yup} = v
+import Error from "@/components/y/error.vue";
+import v from "../../plugins/validate";
+import { login } from "../../utils/user";
+import { http } from "@/plugins/axios";
+const { useForm, useFields, yup } = v;
 
 const schema = yup.object({
   account: yup
     .string()
     .required()
-    .matches(/^\d{11}|.+@.+$/, '请输入邮箱或手机号')
-    .label('账号'),
-  password: yup.string().required().min(5, '密码不少于5位').label('密码'),
-})
+    // .matches(/^\d{11}|.+@.+$/, "请输入邮箱")
+    .label("账号"),
+  password: yup.string().required().min(4, "密码不少于4位").label("密码"),
+});
 const { handleSubmit, values, errors } = useForm({
   validationSchema: schema,
-})
+});
 
-useFields(Object.keys(schema))
+useFields(Object.keys(schema));
 const onSubmit = handleSubmit(async (values: any) => {
-  login(values)
-})
+  const { account, password } = values;
+  const formData = new URLSearchParams();
+  formData.append("username", account);
+  formData.append("password", password);
+  login(formData).then(console.log);
+
+  // const formData = new URLSearchParams();
+  // formData.append("username", account);
+  // formData.append("password", password);
+  // fetch("http://127.0.0.1:5173/api/auth", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/x-www-form-urlencoded",
+  //   },
+  //   body: formData,
+  // })
+  //   .then((r) => r.json())
+  //   .then((r) => {
+  //     console.log("r", r);
+  //   });
+  // console.log("values", values);
+});
 </script>
 
 <style lang="scss">

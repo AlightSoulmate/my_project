@@ -6,14 +6,7 @@
       </article>
     </el-main>
     <el-footer class="relative flex justify-center items-center">
-      <drawerVue @configToggle="isConfigShow"></drawerVue>
-      <Config
-        theme="outline"
-        size="28"
-        fill="#686de0"
-        class="cursor-pointer"
-        @click="configShow"
-      />
+      <drawerVue ></drawerVue>
       <el-input
         v-model="input"
         style="width: 600px; height: 60px"
@@ -29,7 +22,6 @@
 
 <script setup lang="ts">
 import { Search } from "@icon-park/vue-next";
-import { Config } from "@icon-park/vue-next";
 import messageVue from "./message.vue";
 import historyStore from "../../store/llmStore";
 import drawerVue from "./drawer.vue";

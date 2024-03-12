@@ -1,0 +1,128 @@
+<template>
+  <div>
+    <el-drawer v-model="isDrawerShow" direction="rtl" :before-close="tip">
+      <template #header>
+        <h4>参数调整</h4>
+      </template>
+      <template #default>
+        <div class="flex flex-col">
+          <div class="mb-7">
+            <div class="flex">
+              <span class="">是否为流</span>
+              <span class="ml-auto">stream</span>
+            </div>
+            <el-switch
+              v-model="stream"
+              active-text="Open Stream"
+              inactive-text="Close Stream"
+            />
+          </div>
+          <div class="mb-7">
+            <div class="flex">
+              <span class="">文本数量</span>
+              <span class="ml-auto">max_tokens</span>
+            </div>
+            <el-slider v-model="max_tokens" :marks="tokenMark" show-input />
+          </div>
+          <div class="mb-7">
+            <span class="demonstration"></span>
+            <div class="flex">
+              <span class="">文本多样性</span>
+              <span class="ml-auto">temperature</span>
+            </div>
+            <el-slider
+              v-model="temperature"
+              :min="0.1"
+              :max="1"
+              :step="0.02"
+              :marks="temperatureMark"
+              show-input
+            />
+          </div>
+          <div class="mb-7">
+            <div class="flex">
+              <span class="">用词频率</span>
+              <span class="ml-auto">top_p</span>
+            </div>
+            <el-slider
+              v-model="top_p"
+              :min="0.1"
+              :max="1"
+              :step="0.02"
+              :marks="top_pMark"
+              show-input
+            />
+          </div>
+        </div>
+      </template>
+    </el-drawer>
+
+    <el-button type="primary" size="default" @click="toggleDrawerShow"
+      >Send to Backend</el-button
+    >
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { defineEmits } from "vue";
+const emit = defineEmits(["getConfig"]);
+
+const toggleDrawerShow = () => {
+  isDrawerShow.value = !isDrawerShow.value;
+};
+
+const isDrawerShow = ref(false);
+const stream = ref(false);
+
+
+const max_tokens = ref(100);
+const tokenMark = reactive({
+  20: "输出少量内容",
+  60: "输出中量内容",
+  100: "输出大量内容",
+});
+
+const temperature = ref(0.8);
+const temperatureMark = reactive({
+  0.2: "更加精准",
+  0.6: "适中",
+  0.8: "更加有建议性",
+});
+
+const top_p = ref(0.8);
+const top_pMark = reactive({
+  0.2: "文本更加重复",
+  0.6: "适中",
+  0.8: "文本更加生动",
+});
+
+/**
+ * 发送配置数据到父组件
+ * 监听drawer组件是否隐藏, 若隐藏则将数据传送给父组件
+ * @type 类型为LLMModel, 位于types/llm.d.ts中
+ * 注: 该emit只传递配置信息, 主信息在父组件中
+*/
+watch(
+  () => isDrawerShow.value,
+  (value, oldvalue) => {
+    if (value === false) {
+      emit("getConfig", {
+        model: "chatglm3-6b",
+        stream: stream.value,
+        max_tokens: max_tokens.value,
+        temperature: temperature.value,
+        top_p: top_p.value,
+      });
+    }
+  }
+);
+
+const tip = (done: any) => {
+  done();
+  ElNotification({
+    title: "配置重载成功",
+    message: "快去对话试试吧!",
+    type: "success",
+  });
+};
+</script>

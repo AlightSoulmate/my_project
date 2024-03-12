@@ -2,6 +2,11 @@ import { RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
+    path: '/llm',
+    name: 'llm',
+    component: () => import('@/views/llm/dev.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import('@/views/home.vue'),

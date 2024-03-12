@@ -56,24 +56,31 @@
         </div>
       </template>
     </el-drawer>
-
-    <el-button type="primary" size="default" @click="toggleDrawerShow"
-      >Send to Backend</el-button
+    <!-- <button
+      @click="toggleDrawerShow"
+      class="absolute left-0 bottom-0 transition-[.3s] bg-green-200 border-none hover:bg-green-300 px-5 py-3 rounded-full"
     >
+      调整配置
+    </button> -->
+
+    <!-- <el-button type="p" size="default" @click="toggleDrawerShow"
+      >Send to Backend</el-button
+    > -->
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ElNotification } from "element-plus";
 import { defineEmits } from "vue";
+const { isConfigShow } = defineProps(["isConfigShow"]);
+console.log(isConfigShow);
+
 const emit = defineEmits(["getConfig"]);
 
-const toggleDrawerShow = () => {
-  isDrawerShow.value = !isDrawerShow.value;
-};
+// const toggleDrawerShow = () => {};
 
 const isDrawerShow = ref(false);
 const stream = ref(false);
-
 
 const max_tokens = ref(100);
 const tokenMark = reactive({
@@ -95,13 +102,21 @@ const top_pMark = reactive({
   0.6: "适中",
   0.8: "文本更加生动",
 });
+watch(
+  () => isConfigShow,
+  (value, oldValue) => {
+    console.log('value',value)
+    console.log(isConfigShow);
+    isDrawerShow.value = value;
+  }
+);
 
 /**
  * 发送配置数据到父组件
  * 监听drawer组件是否隐藏, 若隐藏则将数据传送给父组件
  * @type 类型为LLMModel, 位于types/llm.d.ts中
  * 注: 该emit只传递配置信息, 主信息在父组件中
-*/
+ */
 watch(
   () => isDrawerShow.value,
   (value, oldvalue) => {

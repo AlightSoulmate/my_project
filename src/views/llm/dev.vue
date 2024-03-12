@@ -5,13 +5,16 @@
       <el-aside width="300px" class="h-full">
         <sideVue></sideVue>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <mainVue></mainVue>
+      </el-main>
     </el-container>
   </div>
 </template>
 
 <script setup lang="ts">
 import drawerVue from "@/components/llm/drawer.vue";
+import mainVue from "@/components/llm/main.vue";
 import sideVue from "@/components/llm/side.vue";
 const content = ref("");
 let initModel = reactive<LLMModel>({

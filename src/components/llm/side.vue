@@ -1,16 +1,19 @@
 <template>
   <div class="h-full flex flex-col">
-    <el-button type="info" text @click="handleClick">开启新对话</el-button>
+    <el-button type="info" text size="large" @click="handleClick">
+      开启新对话
+    </el-button>
     <section class="card flex-1 flex flex-col h-full overflow-y-scroll px-3">
       <historyButton v-for="history in histories" class="w-full">{{
         history.title
       }}</historyButton>
     </section>
-    <section class="flex">
+    <section class="flex my-3 items-center ml-3">
       <el-avatar
         :size="40"
         src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
       />
+      <div class="p-2 ml-2">name</div>
     </section>
   </div>
 </template>
@@ -83,7 +86,7 @@ const histories = [
   {
     title: "龙井村的建筑特色有哪些？",
   },
-    {
+  {
     title: "杭州城隍阁的历史背景是什么？",
   },
   {
@@ -114,7 +117,6 @@ const histories = [
     title: "富阳茶园有什么历史故事？",
   },
 ];
-
 </script>
 
 <style scoped lang="scss">

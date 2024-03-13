@@ -6,6 +6,12 @@ const routes = [
     name: 'home',
     component: () => import('@/views/home.vue'),
   },
+  // {
+  //   path: '/admin',
+  //   name: '/admin',
+  //   component: () => import('@/views/admin/home.vue'),
+  //   meta: { auth: true }
+  // },
   {
     path: '/llm',
     name: 'llm',

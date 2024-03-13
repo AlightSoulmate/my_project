@@ -4,12 +4,16 @@ import store from "./store";
 import router from '@/router'
 import userStore from '../store/userStore';
 
-export async function login(values: UserLoginType |  URLSearchParams) {
+export async function login(values: UserLoginType | URLSearchParams) {
   const { access_token } = await userApi.login(values)
   if ((access_token !== null) || (access_token !== undefined)) {
     store.set(CacheEnum.TOKEN_NAME, access_token)
-    userStore().getUserInfo()
+    if (!store.get(CacheEnum.REDIRECT_ROUTE_NAME)) {
+      store.set(CacheEnum.REDIRECT_ROUTE_NAME, "admin")
+    }
     const routeName = store.get(CacheEnum.REDIRECT_ROUTE_NAME) ?? 'home'
+    userStore().getUserInfo()
+    console.log('routeName', routeName)
     router.push({ name: routeName })
   }
 }

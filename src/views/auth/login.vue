@@ -24,9 +24,8 @@
           </div>
         </div>
         <div class="flex gap-3 justify-center mt-10">
-          <y-link y_title="home"></y-link>
-          <y-link y_title="password"></y-link>
-          <y-link y_title="register"></y-link>
+          <y-link title="忘记密码" path="/404"></y-link>
+          <y-link title="注册" path="/registry"></y-link>
         </div>
       </div>
       <div class="hidden md:block relative">

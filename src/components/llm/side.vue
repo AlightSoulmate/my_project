@@ -1,125 +1,116 @@
 <template>
-  <div class="h-full flex flex-col">
-    <el-button type="info" text size="large" @click="handleClick">
-      开启新对话
-    </el-button>
-    <section class="card flex-1 flex flex-col h-full overflow-y-scroll px-3">
-      <historyButton v-for="history in histories" class="w-full">{{
-        history.title
-      }}</historyButton>
+  <div class="h-full flex flex-col p-4 bg-orange-100">
+    <button
+      class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6"
+      @click="handleClick"
+    >
+      <div class="flex items-center">
+        <Newlybuild
+          class="duration-300 icon translate-x-10"
+          theme="filled"
+          size="32"
+          fill="#2d3436"
+        />
+        <div class="duration-300 ml-3 opacity-0" @click="createSession">
+          开启新对话
+        </div>
+      </div>
+    </button>
+    <section
+      class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg"
+    >
+      <historyButton
+        v-for="(session, index) in sessions"
+        class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md"
+        @click="switchSession(index)"
+      >
+        <template #title> 新的聊天 </template>
+        <template #time>
+          {{ session[session.length - 1].date }}
+        </template>
+        <template #length>
+          {{ session.length + "条信息" }}
+        </template>
+      </historyButton>
     </section>
-    <section class="flex my-3 items-center ml-3">
-      <el-avatar
-        :size="40"
-        src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-      />
-      <div class="p-2 ml-2">name</div>
+    <section
+      class="flex my-3 items-center py-2 px-3 bg-white rounded-full duration-300 cursor-pointer hover:bg-zinc-200"
+    >
+      <el-dropdown class="w-full">
+        <span class="el-dropdown-link w-full flex items-center">
+          <el-avatar :size="40" src="/images/user.png" />
+          <div class="ml-3">
+            {{
+              name || email || "user"
+            }}
+          </div>
+          <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Newlybuild } from "@icon-park/vue-next";
 import historyButton from "./historyButton.vue";
+import { getHistory } from "@/apis/historyApi";
+import { User } from "@/apis/userApi";
+import userStore from "@/store/userStore";
+import { uniqueId } from "lodash";
+import { logout } from "@/utils/user";
+import { randomUUID } from "crypto";
+import { v4 } from "uuid";
+const sessions = ref(await userStore().getSessions());
+const name = ref("");
+const email = ref("");
+const createSession = async () => {
+  userStore().createSession([
+    {
+      id: v4(),
+      role: "user",
+      content: JSON.stringify({
+        content: "hi",
+      }),
+      date: new Date().toUTCString(),
+    },
+  ]);
+};
+(await getHistory()
+  .then((r) => r.json() as unknown as any)
+  .then((r) => {
+    name.value = r.name
+    email.value = r.email
+    console.log("🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸");
+    console.log(r);
+    console.log("🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸");
+  })) as User;
 
 const handleClick = () => {
   console.log("click");
 };
 
-const histories = [
-  {
-    title: "西湖风景区怎么样？",
-  },
-  {
-    title: "灵隐寺有什么特色？",
-  },
-  {
-    title: "雷峰塔是杭州的哪个景点？",
-  },
-  {
-    title: "西溪湿地适合带小孩吗？",
-  },
-  {
-    title: "千岛湖可以游泳吗？",
-  },
-  {
-    title: "富阳茶园的开放时间是多久？",
-  },
-  {
-    title: "杭州宋城的门票价格是多少？",
-  },
-  {
-    title: "龙井茶园有什么特色茶叶？",
-  },
-  {
-    title: "杭州动物园的动物种类有哪些？",
-  },
-  {
-    title: "九溪烟树的美景在哪个季节？",
-  },
-  {
-    title: "杭州植物园的植物有多少种类？",
-  },
-  {
-    title: "西湖国家湿地公园的生态环境如何？",
-  },
-  {
-    title: "钱塘江的游船服务是怎样的？",
-  },
-  {
-    title: "六和塔的历史有多久？",
-  },
-  {
-    title: "浙江自然博物馆的展览有哪些？",
-  },
-  {
-    title: "西溪天堂的游玩项目有哪些？",
-  },
-  {
-    title: "西兴古镇的文化遗产是什么？",
-  },
-  {
-    title: "梅家坞茶园的品茗体验如何？",
-  },
-  {
-    title: "宋城景区的主题表演是什么？",
-  },
-  {
-    title: "龙井村的建筑特色有哪些？",
-  },
-  {
-    title: "杭州城隍阁的历史背景是什么？",
-  },
-  {
-    title: "千岛湖游船的航线有哪些？",
-  },
-  {
-    title: "西溪湿地可以看到哪些野生动物？",
-  },
-  {
-    title: "雷峰塔的建筑结构是什么样的？",
-  },
-  {
-    title: "钱塘江的夜景有多美？",
-  },
-  {
-    title: "杭州宋城的文化表演有哪些？",
-  },
-  {
-    title: "灵隐寺的开放时间是多久？",
-  },
-  {
-    title: "西湖风景区的周边有哪些特色小吃？",
-  },
-  {
-    title: "龙井茶园的采茶季节是什么时候？",
-  },
-  {
-    title: "富阳茶园有什么历史故事？",
-  },
-];
+const switchSession = (index: number) => {
+  userStore().setSessionIndex(index);
+};
 </script>
 
 <style scoped lang="scss">
+.add {
+  &:hover div {
+    opacity: 1;
+  }
+  &:hover .icon {
+    transform: translateX(-1rem);
+  }
+}
 .el-button + .el-button {
   margin-left: 0px;
 }
@@ -130,7 +121,7 @@ const histories = [
 
 /* 定义滚动条轨道 */
 .card::-webkit-scrollbar-track {
-  background-color: #929ca059; /* 设置轨道背景色 */
+  background-color: #b8bfc259; /* 设置轨道背景色 */
   border-radius: 10px; /* 轨道边框圆角 */
 }
 /* 定义滚动条 */
@@ -141,7 +132,7 @@ const histories = [
 
 /* 定义滚动条滑块 */
 .card::-webkit-scrollbar-thumb {
-  background-color: #878b8d; /* 设置滑块背景色 */
+  background-color: #c4c4c4; /* 设置滑块背景色 */
   border-radius: 10px; /* 轨道边框圆角 */
 }
 </style>

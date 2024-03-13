@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pr-3">
     <el-drawer v-model="isDrawerShow" direction="rtl" :before-close="tip">
       <template #header>
         <h4>参数调整</h4>
@@ -56,13 +56,15 @@
         </div>
       </template>
     </el-drawer>
-    <Config
-      theme="outline"
-      size="28"
-      fill="#686de0"
-      class="cursor-pointer"
-      @click="toggleDrawerShow"
-    />
+    <div class="duration-300 hover:scale-125">
+      <Config
+        theme="outline"
+        size="28"
+        fill="#a29bfe"
+        class="cursor-pointer"
+        @click="toggleDrawerShow"
+      />
+    </div>
   </div>
 </template>
 

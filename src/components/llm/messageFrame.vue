@@ -2,11 +2,12 @@
   <div class="flex">
     <el-avatar
       :size="40"
-      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      src="/images/user.png"
     />
-    <div class="flex flex-col">
-      <div>
-        <slot name="name"></slot>
+    <div class="flex flex-col w-full pl-3">
+      <div class="flex">
+        <div><slot name="name"></slot></div>
+        <div class="ml-3"><slot name="date"></slot></div>
       </div>
       <slot name="content"></slot>
     </div>

@@ -24,7 +24,7 @@ export function getHistory(): Promise<Response> {
   return fetch("http://127.0.0.1:5173/api/current", {
     headers: {
       "Authorization": `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
-      "Accept": "application/json"
+      "Content-Type": "application/json"
     }
   })
 }

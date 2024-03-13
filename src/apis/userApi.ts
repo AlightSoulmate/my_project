@@ -21,7 +21,7 @@ export interface User {
   history: {}[]
 }
 
-function getCurrentUser() {
+export function getCurrentUser() {
   return fetch("http://127.0.0.1:5173/api/current", {
     headers: {
       "Authorization": `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,

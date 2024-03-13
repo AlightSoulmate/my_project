@@ -3,17 +3,6 @@ import { RouteRecordRaw } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('@/views/home.vue'),
-  },
-  // {
-  //   path: '/admin',
-  //   name: '/admin',
-  //   component: () => import('@/views/admin/home.vue'),
-  //   meta: { auth: true }
-  // },
-  {
-    path: '/llm',
     name: 'llm',
     component: () => import('@/views/llm/dev.vue'),
     meta: { auth: true }

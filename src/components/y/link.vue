@@ -1,11 +1,10 @@
 <template>
-  <router-link to="/" class="y_text">{{y_title}}</router-link>
+  <router-link :to="path" class="y_text">{{title}}</router-link>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  y_title:String
-})
+const {path, title} = defineProps(['title', 'path'])
+
 </script>
 
 <style scoped>

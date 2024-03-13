@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen w-screen">
     <!-- <drawerVue @getConfig="getConfig"/> -->
-    <el-container class="h-full w-full">
+    <el-container class="h-full w-full bg-orange-50">
       <el-aside width="300px" class="h-full">
         <sideVue></sideVue>
       </el-aside>
@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import drawerVue from "@/components/llm/drawer.vue";
 import mainVue from "@/components/llm/main.vue";
 import sideVue from "@/components/llm/side.vue";
 const content = ref("");

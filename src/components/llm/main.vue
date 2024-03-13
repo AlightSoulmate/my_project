@@ -1,7 +1,7 @@
 <template>
   <el-container class="h-full w-full">
     <el-main class="main flex">
-      <article class="h-flex-1">
+      <article class="flex-1">
         <messageVue></messageVue>
       </article>
     </el-main>
@@ -23,27 +23,29 @@
 import { createConversation, getHistory } from "@/apis/historyApi";
 import { User } from "@/apis/userApi";
 import { Search } from "@icon-park/vue-next";
+import {} from "vue-router";
 import drawerVue from "./drawer.vue";
 import messageVue from "./message.vue";
+import userStore from "@/store/userStore";
+import {v4} from 'uuid'
+
 
 const userInput = ref("");
 
 const handleSubmit = async (e: any) => {
   userInput.value = e;
-  const userId = (await getHistory().then((r) => r.json() as unknown as User))
-    .id;
-  if (userId) {
-    createConversation(
-      userId,
-      JSON.stringify({
-        content: JSON.stringify({
-          role: "user",
-          content: userInput.value,
-        }),
-        owner_id: userId,
-        id: 0,
-      })
-    );
+  try {
+    // 先post再储存到本地
+    userStore().updateCurrentSession({
+      id: v4(),
+      content: JSON.stringify({
+        content: e
+      }),
+      role: "user",
+      date: new Date().toUTCString()
+    })
+  } catch (e) {
+    console.error(e);
   }
   userInput.value = "";
 };

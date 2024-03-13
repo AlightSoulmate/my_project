@@ -3,6 +3,12 @@
     <div
       class="w-[720px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
     >
+      <div class="hidden md:block relative">
+        <img
+          src="/images/registry.jpeg"
+          class="absolute h-full w-full object-cover"
+        />
+      </div>
       <div class="p-6 flex flex-col justify-between">
         <div>
           <h2 class="text-center text-gray-700 text-lg">用户注册</h2>
@@ -24,16 +30,9 @@
           </div>
         </div>
         <div class="flex gap-3 justify-center mt-10">
-          <y-link y_title="home"></y-link>
-          <y-link y_title="password"></y-link>
-          <y-link y_title="register"></y-link>
+          <y-link title="忘记密码" path="/404"></y-link>
+          <y-link title="登录" path="/login"></y-link>
         </div>
-      </div>
-      <div class="hidden md:block relative">
-        <img
-          src="/images/login.jpg"
-          class="absolute h-full w-full object-cover"
-        />
       </div>
     </div>
   </form>

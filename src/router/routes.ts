@@ -2,27 +2,26 @@ import { RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
-    path: '/llm',
-    name: 'llm',
-    component: () => import('@/views/llm/dev.vue'),
-    meta: {
-      auth: true
-    }
-  },
-  {
     path: '/',
     name: 'home',
     component: () => import('@/views/home.vue'),
   },
   {
-    path: '/article',
-    name: 'article',
-    component: () => import('@/views/article.vue'),
+    path: '/llm',
+    name: 'llm',
+    component: () => import('@/views/llm/dev.vue'),
+    meta: { auth: true }
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/auth/login.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/registry',
+    name: 'registry',
+    component: () => import('@/views/auth/registry.vue'),
     meta: { guest: true },
   },
 

@@ -74,5 +74,5 @@ export default defineStore('history', {
       this.history = [...this.history, ...data]
     }
   },
-  
+
 })

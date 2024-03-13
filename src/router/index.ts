@@ -10,8 +10,6 @@ const router = createRouter({
   routes: [...routes],
 })
 export async function setupRouter(app: App) {
-  // const user = userStore()
-  // await user.getUserInfo()
   await userStore().getUserInfo()
   autoload(router)
   guard(router)

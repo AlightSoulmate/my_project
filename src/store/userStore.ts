@@ -11,8 +11,9 @@ export default defineStore('user', {
   actions: {
     async getUserInfo() {
       if (store.get(CacheEnum.TOKEN_NAME)) {
-        const res = await userApi.info()
-        this.info = res.data
+        const res = await userApi.getCurrentUser()
+        this.info = res
+        console.log('res', res)
       }
     },
   },

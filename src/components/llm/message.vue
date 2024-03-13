@@ -1,35 +1,46 @@
 <template>
   <section class="px-32">
-    <messageFrame class="" v-for="qa in data">
-      <template #name> {{ qa.role }} </template>
+    <messageFrame class="" v-for="history in data!.history">
+      <template #name> {{ name || email }} </template>
       <template #content>
-        {{ qa.answer || qa.question }}
+        {{ JSON.parse(history.content).content }}
       </template>
     </messageFrame>
+    <el-button type="primary" size="default" @click="sendRequest"
+      >send request</el-button
+    >
   </section>
 </template>
 
 <script setup lang="ts">
 import messageFrame from "./messageFrame.vue";
-import historyStore from "../../store/llmStore";
-let data = ref([]);
+import { getHistory } from "@/apis/historyApi";
+const name = ref("");
+const email = ref("");
 
-const history = historyStore();
-history.getUserHistory().then((r) => {
-  data.value.push(...r);
-  console.log("r", r);
-});
+type HistoryType = {
+  id: number;
+  owner_id: number;
+  content: string;
+};
 
-// 每当pinia中的history数据更新后(用户submit && 服务端返回), 刷新视图
-watch(
-  () => history.history,
-  () => {
-    console.log("REFRESH");
-    history.getUserHistory().then((r) => {
-      data.value.splice(0, data.value.length, ...r);
+type Item = {
+  id: number;
+  name: string;
+  email: string;
+  history: HistoryType[];
+};
+
+let data = ref<Item>({} as any);
+async function sendRequest() {
+  getHistory()
+    .then((r) => r.json())
+    .then((r: any) => {
+      data.value!.history = { ...data.value!.history, ...r.history };
+      name.value = r.name;
+      email.value = r.email;
     });
-  }
-);
+}
 </script>
 
 <style scoped></style>

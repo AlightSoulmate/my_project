@@ -5,9 +5,9 @@
       src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
     />
     <div class="flex flex-col">
-      <span>
+      <div>
         <slot name="name"></slot>
-      </span>
+      </div>
       <slot name="content"></slot>
     </div>
   </div>

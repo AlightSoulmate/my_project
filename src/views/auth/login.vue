@@ -43,7 +43,6 @@
 import Error from "@/components/y/error.vue";
 import v from "../../plugins/validate";
 import { login } from "../../utils/user";
-import { http } from "@/plugins/axios";
 const { useForm, useFields, yup } = v;
 
 const schema = yup.object({
@@ -64,23 +63,9 @@ const onSubmit = handleSubmit(async (values: any) => {
   const formData = new URLSearchParams();
   formData.append("username", account);
   formData.append("password", password);
-  login(formData).then(console.log);
-
-  // const formData = new URLSearchParams();
-  // formData.append("username", account);
-  // formData.append("password", password);
-  // fetch("http://127.0.0.1:5173/api/auth", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/x-www-form-urlencoded",
-  //   },
-  //   body: formData,
-  // })
-  //   .then((r) => r.json())
-  //   .then((r) => {
-  //     console.log("r", r);
-  //   });
-  // console.log("values", values);
+  login(formData).then((r) => {
+    console.log("r", r);
+  });
 });
 </script>
 

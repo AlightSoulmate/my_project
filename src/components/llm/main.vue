@@ -6,14 +6,13 @@
       </article>
     </el-main>
     <el-footer class="relative flex justify-center items-center">
-      <drawerVue ></drawerVue>
+      <drawerVue></drawerVue>
       <el-input
-        v-model="input"
+        v-model="userInput"
         style="width: 600px; height: 60px"
         size="large"
         placeholder="想了解点什么~"
         :suffix-icon="Search"
-        @input="handleInput"
         @change="handleSubmit"
       />
     </el-footer>
@@ -21,41 +20,33 @@
 </template>
 
 <script setup lang="ts">
+import { createConversation, getHistory } from "@/apis/historyApi";
+import { User } from "@/apis/userApi";
 import { Search } from "@icon-park/vue-next";
-import messageVue from "./message.vue";
-import historyStore from "../../store/llmStore";
 import drawerVue from "./drawer.vue";
+import messageVue from "./message.vue";
 
-const history = historyStore();
-const isConfigShow = ref(false);
-const messages = ref([]);
-const input = ref("");
+const userInput = ref("");
 
-const configShow = () => {
-  isConfigShow.value = !isConfigShow.value;
-};
-const handleInput = (e: any) => {
-  console.log("e", e);
-};
-
-const handleSubmit = (e: any) => {
-  input.value = e;
-  history.updateUserHistory([
-    {
-      role: "user",
-      question: e,
-      answer: e,
-    },
-  ]);
-  input.value = "";
-};
-
-watch(
-  () => input.value,
-  (value, oldvalue) => {
-    console.log("input.value", input.value);
+const handleSubmit = async (e: any) => {
+  userInput.value = e;
+  const userId = (await getHistory().then((r) => r.json() as unknown as User))
+    .id;
+  if (userId) {
+    createConversation(
+      userId,
+      JSON.stringify({
+        content: JSON.stringify({
+          role: "user",
+          content: userInput.value,
+        }),
+        owner_id: userId,
+        id: 0,
+      })
+    );
   }
-);
+  userInput.value = "";
+};
 </script>
 
 <style scoped lang="scss">

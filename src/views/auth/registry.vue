@@ -1,7 +1,7 @@
 <template>
   <form class @submit="onSubmit">
     <div
-      class="w-[720px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
+      class="w-[720px] h-[500px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
     >
       <div class="hidden md:block relative">
         <img
@@ -13,12 +13,16 @@
         <div>
           <h2 class="text-center text-gray-700 text-lg">用户注册</h2>
           <div class="mt-8">
-            <yInput v-model="values.account"></yInput>
+            <yInput v-model="values.account" @input="validate"></yInput>
             <Error :error="errors.account"></Error>
-            <yInput v-model="values.password" class="mt-5"></yInput>
+            <yInput
+              v-model="values.password"
+              class="mt-5"
+              @input="validate"
+            ></yInput>
             <Error :error="errors.password"></Error>
           </div>
-          <YButton class="w-full"></YButton>
+          <YButton class="w-full">注册</YButton>
           <div class="flex justify-center mt-3">
             <icon-wechat
               theme="outline"
@@ -42,6 +46,9 @@
 import Error from "@/components/y/error.vue";
 import v from "../../plugins/validate";
 import { login } from "../../utils/user";
+import { registry } from "@/apis/userApi";
+import { ElNotification } from "element-plus";
+import router from "@/router";
 const { useForm, useFields, yup } = v;
 
 const schema = yup.object({
@@ -52,19 +59,27 @@ const schema = yup.object({
     .label("邮箱"),
   password: yup.string().required().min(4, "密码不少于4位").label("密码"),
 });
-const { handleSubmit, values, errors } = useForm({
+const { handleSubmit, values, errors, validate } = useForm({
   validationSchema: schema,
 });
 
 useFields(Object.keys(schema));
 const onSubmit = handleSubmit(async (values: any) => {
   const { account, password } = values;
-  const formData = new URLSearchParams();
-  formData.append("username", account);
-  formData.append("password", password);
-  login(formData).then((r) => {
-    console.log("r", r);
-  });
+  registry({
+    name: account,
+    email: account,
+    password: password,
+  })
+    .then((r) => {
+      console.log("r", r);
+    })
+    .then(() => {
+      ElNotification({ title: "注册成功" });
+      setTimeout(() => {
+        router.push({ name: "login" });
+      }, 1000);
+    });
 });
 </script>
 

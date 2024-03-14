@@ -2,7 +2,7 @@
   <div class="h-full flex flex-col p-4 bg-orange-100">
     <button
       class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6"
-      @click="handleClick"
+      @click="createSession"
     >
       <div class="flex items-center">
         <Newlybuild
@@ -11,9 +11,7 @@
           size="32"
           fill="#2d3436"
         />
-        <div class="duration-300 ml-3 opacity-0" @click="createSession">
-          开启新对话
-        </div>
+        <div class="duration-300 ml-3 opacity-0">开启新对话</div>
       </div>
     </button>
     <section
@@ -40,13 +38,8 @@
         <span class="el-dropdown-link w-full flex items-center">
           <el-avatar :size="40" src="/images/user.png" />
           <div class="ml-3">
-            {{
-              name || email || "user"
-            }}
+            {{ name || email || "user" }}
           </div>
-          <el-icon class="el-icon--right">
-            <arrow-down />
-          </el-icon>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -59,20 +52,17 @@
 </template>
 
 <script setup lang="ts">
-import { Newlybuild } from "@icon-park/vue-next";
-import historyButton from "./historyButton.vue";
-import { getHistory } from "@/apis/historyApi";
-import { User } from "@/apis/userApi";
-import userStore from "@/store/userStore";
-import { uniqueId } from "lodash";
+import { User, getCurrentUser } from "@/apis/userApi";
+import sessionStore from "@/store/sessionStore";
 import { logout } from "@/utils/user";
-import { randomUUID } from "crypto";
+import { Newlybuild } from "@icon-park/vue-next";
 import { v4 } from "uuid";
-const sessions = ref(await userStore().getSessions());
+import historyButton from "./historyButton.vue";
+const sessions = ref(await sessionStore().getSessions());
 const name = ref("");
 const email = ref("");
 const createSession = async () => {
-  userStore().createSession([
+  sessionStore().createSession([
     {
       id: v4(),
       role: "user",
@@ -83,22 +73,21 @@ const createSession = async () => {
     },
   ]);
 };
-(await getHistory()
-  .then((r) => r.json() as unknown as any)
-  .then((r) => {
-    name.value = r.name
-    email.value = r.email
-    console.log("🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸");
-    console.log(r);
-    console.log("🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸");
-  })) as User;
+await getCurrentUser().then((r: User | undefined) => {
+  name.value = r!.name;
+  email.value = r!.email;
+});
 
 const handleClick = () => {
   console.log("click");
 };
 
-const switchSession = (index: number) => {
-  userStore().setSessionIndex(index);
+const switchSession = async (index: number) => {
+  const session = sessionStore();
+  const storeIndex = await session.setSessionIndex(index);
+  if (storeIndex === index) {
+    session.setFlush();
+  }
 };
 </script>
 

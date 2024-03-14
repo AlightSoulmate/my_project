@@ -1,18 +1,22 @@
 <template>
   <form class @submit="onSubmit">
     <div
-      class="w-[720px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
+      class="w-[720px] h-[500px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
     >
       <div class="p-6 flex flex-col justify-between">
         <div>
           <h2 class="text-center text-gray-700 text-lg">用户登陆</h2>
           <div class="mt-8">
-            <yInput v-model="values.account"></yInput>
+            <yInput v-model="values.account" @input="validate"></yInput>
             <Error :error="errors.account"></Error>
-            <yInput v-model="values.password" class="mt-5"></yInput>
+            <yInput
+              v-model="values.password"
+              class="mt-5"
+              @input="validate"
+            ></yInput>
             <Error :error="errors.password"></Error>
           </div>
-          <YButton class="w-full"></YButton>
+          <YButton class="w-full">登录</YButton>
           <div class="flex justify-center mt-3">
             <icon-wechat
               theme="outline"
@@ -48,11 +52,11 @@ const schema = yup.object({
   account: yup
     .string()
     .required()
-    // .matches(/^\d{11}|.+@.+$/, "请输入邮箱")
+    .matches(/^\d{11}|.+@.+$/, "请输入邮箱")
     .label("账号"),
   password: yup.string().required().min(4, "密码不少于4位").label("密码"),
 });
-const { handleSubmit, values, errors } = useForm({
+const { handleSubmit, values, errors, validate } = useForm({
   validationSchema: schema,
 });
 

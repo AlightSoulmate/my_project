@@ -20,14 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { createConversation, getHistory } from "@/apis/historyApi";
-import { User } from "@/apis/userApi";
 import { Search } from "@icon-park/vue-next";
-import {} from "vue-router";
+import { v4 } from 'uuid';
+import sessionStore from "@/store/sessionStore";
 import drawerVue from "./drawer.vue";
 import messageVue from "./message.vue";
-import userStore from "@/store/userStore";
-import {v4} from 'uuid'
 
 
 const userInput = ref("");
@@ -36,7 +33,7 @@ const handleSubmit = async (e: any) => {
   userInput.value = e;
   try {
     // 先post再储存到本地
-    userStore().updateCurrentSession({
+    sessionStore().updateCurrentSession({
       id: v4(),
       content: JSON.stringify({
         content: e

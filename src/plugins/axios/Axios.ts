@@ -28,7 +28,7 @@ export default class Axios {
     this.instance.interceptors.request.use(
       (config) => {
         config.headers!.Authorization =
-          'Bearer' + store.get(CacheEnum.TOKEN_NAME)
+          'Bearer ' + store.get(CacheEnum.TOKEN_NAME)
         return config
       },
       (error) => {

@@ -13,10 +13,10 @@ export interface AuthReturnType {
   access_token: string
   token_type: string
 }
-export interface UserRegistryType{
+export interface UserRegistryType {
   name: string
   password: string
-  email : string
+  email: string
 }
 
 export interface UserLoginType extends URLSearchParams {
@@ -36,15 +36,14 @@ export interface User {
  * 若有返回值(已授权), 则返回json数据, 若无返回值, 既清理token, 路由跳转到登录界面
 */
 export async function getCurrentUser(): Promise<User | undefined> {
-  const result = await fetch("http://127.0.0.1:5173/api/current", {
+  const result = await http.request({
+    url: "/current",
     headers: {
-      "Authorization": `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
+      'Authorization': `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
       "Content-Type": "application/json"
     },
   }).then(r => {
-    if (r.ok) {
-      return r.json()
-    }
+    if (r) return r
     logout()
     return undefined
   })

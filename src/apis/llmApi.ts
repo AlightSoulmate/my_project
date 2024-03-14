@@ -7,7 +7,7 @@ import { http } from '../plugins/axios/index'
 
 export interface LLMRequestType {
   model: string;
-  messages: Message[];
+  messages: string;
   stream: boolean;
   max_tokens: number;
   temperature: number;

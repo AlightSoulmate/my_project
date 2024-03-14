@@ -11,11 +11,7 @@
               <span class="">是否为流</span>
               <span class="ml-auto">stream</span>
             </div>
-            <el-switch
-              v-model="stream"
-              active-text="Open Stream"
-              inactive-text="Close Stream"
-            />
+            <el-switch v-model="stream" active-text="Open Stream" inactive-text="Close Stream" />
           </div>
           <div class="mb-7">
             <div class="flex">
@@ -30,40 +26,20 @@
               <span class="">文本多样性</span>
               <span class="ml-auto">temperature</span>
             </div>
-            <el-slider
-              v-model="temperature"
-              :min="0.1"
-              :max="1"
-              :step="0.02"
-              :marks="temperatureMark"
-              show-input
-            />
+            <el-slider v-model="temperature" :min="0.1" :max="1" :step="0.02" :marks="temperatureMark" show-input />
           </div>
           <div class="mb-7">
             <div class="flex">
               <span class="">用词频率</span>
               <span class="ml-auto">top_p</span>
             </div>
-            <el-slider
-              v-model="top_p"
-              :min="0.1"
-              :max="1"
-              :step="0.02"
-              :marks="top_pMark"
-              show-input
-            />
+            <el-slider v-model="top_p" :min="0.1" :max="1" :step="0.02" :marks="top_pMark" show-input />
           </div>
         </div>
       </template>
     </el-drawer>
     <div class="duration-300 hover:scale-125">
-      <Config
-        theme="outline"
-        size="28"
-        fill="#a29bfe"
-        class="cursor-pointer"
-        @click="toggleDrawerShow"
-      />
+      <Config theme="outline" size="28" fill="#a29bfe" class="cursor-pointer" @click="toggleDrawerShow" />
     </div>
   </div>
 </template>
@@ -72,6 +48,8 @@
 import { ElNotification } from "element-plus";
 import { defineEmits } from "vue";
 import { Config } from "@icon-park/vue-next";
+import llmStore from "@/store/llmStore";
+const conf = llmStore()
 
 const emit = defineEmits(["getConfig"]);
 
@@ -80,23 +58,22 @@ const toggleDrawerShow = () => {
 };
 
 const isDrawerShow = ref(false);
-const stream = ref(false);
+const stream = ref(await conf.getConfig().then(r=>r?.stream));
 
-const max_tokens = ref(100);
+const max_tokens = ref(await conf.getConfig().then(r=>r?.max_tokens));
 const tokenMark = reactive({
   20: "输出少量内容",
   60: "输出中量内容",
   100: "输出大量内容",
 });
 
-const temperature = ref(0.8);
+const temperature = ref(await conf.getConfig().then(r=>r?.temperature));
 const temperatureMark = reactive({
   0.2: "更加精准",
   0.6: "适中",
   0.8: "更加有建议性",
 });
-
-const top_p = ref(0.8);
+const top_p = ref(await conf.getConfig().then(r=>r?.top_p));
 const top_pMark = reactive({
   0.2: "文本更加重复",
   0.6: "适中",
@@ -105,21 +82,19 @@ const top_pMark = reactive({
 
 /**
  * 发送配置数据到父组件
- * 监听drawer组件是否隐藏, 若隐藏则将数据传送给父组件
- * @type 类型为LLMModel, 位于types/llm.d.ts中
- * 注: 该emit只传递配置信息, 主信息在父组件中
+ * 监听drawer组件是否隐藏, 若隐藏则将数据通过pinia更新
  */
 watch(
   () => isDrawerShow.value,
-  (value, oldvalue) => {
+  (value) => {
     if (value === false) {
-      emit("getConfig", {
+      llmStore().updateConfig({
         model: "chatglm3-6b",
-        stream: stream.value,
-        max_tokens: max_tokens.value,
-        temperature: temperature.value,
-        top_p: top_p.value,
-      });
+        stream: stream.value!,
+        max_tokens: max_tokens.value!,
+        temperature: temperature.value!,
+        top_p: top_p.value!
+      })
     }
   }
 );

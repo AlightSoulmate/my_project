@@ -5,7 +5,7 @@ import { CacheEnum } from '@/enum/cacheEnum'
 import { v4 } from 'uuid'
 export interface LLMRequestConfigType {
   model: string;
-  stream: boolean;
+  // stream: boolean;
   max_tokens: number;
   temperature: number;
   top_p: number;
@@ -75,14 +75,12 @@ export default defineStore('llm-config', {
     return {
       config: {
         model: "chatglm3-6b",
-        stream: false,
+        stream: true,
         max_tokens: 100,
         temperature: 0.8,
         top_p: 0.8,
       },
-      currentData: {
-
-      }
+      currentData: {}
     }
   },
   actions: {

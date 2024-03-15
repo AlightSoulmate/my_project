@@ -37,7 +37,6 @@ export function createCompletion(data: LLMRequestType) {
       const responseStream = progressEvent.event?.currentTarget.response as string
       const res = new ReadableStream(responseStream)
       const reader = res.pipeThrough(new TextDecoderStream()).getReader()
-
       // 读取并处理流中的数据
       while (true) {
         const { done, value } = await reader.read()
@@ -77,7 +76,7 @@ export async function getStream(data: LLMRequestType) {
       ...data
     })
   });
-  const reader = res.body.getReader();
+  const reader = res.body!.getReader();
   while (true) {
     const { done, value } = await reader.read()
     if (done) break
@@ -86,7 +85,6 @@ export async function getStream(data: LLMRequestType) {
     try {
       if (part.match(/\[DONE\]/)) {
       } else {
-        console.log('part', part)
         const postProcessData = JSON.parse(part)
         const item = {
           id: v4(),
@@ -94,10 +92,7 @@ export async function getStream(data: LLMRequestType) {
           role: 'machine',
           content: postProcessData.choices[0].delta.content
         }
-
-        // setTimeout(() => {
-        //   sessionStore().pushItemToCurrentSession(item)
-        // }, 3000)
+        sessionStore().pushItemToCurrentSession(item)
       }
     } catch (e) {
       console.error(e)

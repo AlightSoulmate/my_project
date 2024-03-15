@@ -1,24 +1,24 @@
 <template>
   <div class="pr-3">
-    <el-drawer v-model="isDrawerShow" direction="rtl" :before-close="tip">
+    <el-drawer size="700px" v-model="isDrawerShow" direction="rtl" :before-close="tip">
       <template #header>
-        <h4>参数调整</h4>
+        <h1 class="text-xl border-b-2 py-6">参数调整</h1>
       </template>
       <template #default>
         <div class="flex flex-col">
-          <div class="mb-7">
+          <!-- <div class="mb-7">
             <div class="flex">
               <span class="">是否为流</span>
               <span class="ml-auto">stream</span>
             </div>
             <el-switch v-model="stream" active-text="Open Stream" inactive-text="Close Stream" />
-          </div>
+          </div> -->
           <div class="mb-7">
             <div class="flex">
               <span class="">文本数量</span>
               <span class="ml-auto">max_tokens</span>
             </div>
-            <el-slider v-model="max_tokens" :marks="tokenMark" show-input />
+            <el-slider :max="2048" v-model="max_tokens" :marks="tokenMark" show-input />
           </div>
           <div class="mb-7">
             <span class="demonstration"></span>
@@ -58,22 +58,22 @@ const toggleDrawerShow = () => {
 };
 
 const isDrawerShow = ref(false);
-const stream = ref(await conf.getConfig().then(r=>r?.stream));
+const stream = ref(await conf.getConfig().then(r => r?.stream));
 
-const max_tokens = ref(await conf.getConfig().then(r=>r?.max_tokens));
+const max_tokens = ref(await conf.getConfig().then(r => r?.max_tokens));
 const tokenMark = reactive({
-  20: "输出少量内容",
-  60: "输出中量内容",
-  100: "输出大量内容",
+  300: "输出少量内容",
+  1024: "输出中量内容",
+  1800: "输出大量内容",
 });
 
-const temperature = ref(await conf.getConfig().then(r=>r?.temperature));
+const temperature = ref(await conf.getConfig().then(r => r?.temperature));
 const temperatureMark = reactive({
   0.2: "更加精准",
   0.6: "适中",
   0.8: "更加有建议性",
 });
-const top_p = ref(await conf.getConfig().then(r=>r?.top_p));
+const top_p = ref(await conf.getConfig().then(r => r?.top_p));
 const top_pMark = reactive({
   0.2: "文本更加重复",
   0.6: "适中",
@@ -90,7 +90,6 @@ watch(
     if (value === false) {
       llmStore().updateConfig({
         model: "chatglm3-6b",
-        stream: stream.value!,
         max_tokens: max_tokens.value!,
         temperature: temperature.value!,
         top_p: top_p.value!

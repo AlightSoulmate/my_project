@@ -1,11 +1,11 @@
 <template>
   <el-container class="h-full w-full">
-    <el-main class="main flex">
+    <el-main class="main flex" id="main-window">
       <article class="flex-1">
         <messageVue></messageVue>
       </article>
     </el-main>
-    <el-footer class="relative flex justify-center items-center">
+    <el-footer class="relative flex justify-center items-center mt-3">
       <drawerVue></drawerVue>
       <el-input v-model="userInput" style="width: 600px; height: 60px" size="large" placeholder="想了解点什么~"
         :suffix-icon="Search" @change="handleSubmit" />
@@ -21,49 +21,59 @@ import drawerVue from "./drawer.vue";
 import messageVue from "./message.vue";
 import { createCompletion, createCompletionFetch, getStream } from "@/apis/llmApi";
 import llmStore, { LLMResponse } from "@/store/llmStore";
+import { ref, onMounted } from 'vue'
+onMounted(() => {
+  const mainWindow = document.getElementById("main-window")
+  mainWindow?.scroll({ top: mainWindow?.scrollHeight, behavior: 'smooth' })
+})
 
-
+watch(await sessionStore(), () => {
+  const mainWindow = document.getElementById("main-window")
+  mainWindow?.scroll({ top: mainWindow?.scrollHeight, behavior: 'smooth' })
+})
 
 const userInput = ref("");
 
 const handleSubmit = async (e: any) => {
   userInput.value = e;
   try {
-    getStream({
-      ...await llmStore().getConfig(),
-      messages: [
-        {
-          "role": "system",
-          "content": "You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown."
-        },
-        {
-          "role": "user",
-          "content": `${userInput.value}`
-        }
-      ],
-    }).then((data) => {
-      console.log('data',data)
-      // sessionStore().updateCurrentSession({
-      //   id: v4(),
-      //   content: JSON.stringify({
-      //     content: e
-      //   }),
-      //   role: "user",
-      //   date: new Date().toUTCString()
-      // })
-      // sessionStore().updateCurrentSession({
-      //   date: new Date().toUTCString(),
-      //   id: v4(),
-      //   role: 'machine',
-      //   content: '...'
-      // })
-    })
-
+    await sessionStore().updateCurrentSession({
+      id: v4(),
+      content: JSON.stringify({
+        content: e
+      }),
+      role: "user",
+      date: new Date().toUTCString()
+    }).then(async () => {
+      await sessionStore().updateCurrentSession({
+        date: new Date().toUTCString(),
+        id: v4(),
+        role: 'machine',
+        content: '...'
+      })
+    }).then(dispatch)
   } catch (e) {
     console.error(e);
   }
   userInput.value = "";
 };
+
+const dispatch = async () => {
+  const config = await llmStore().getConfig()
+  getStream({
+    ...config,
+    messages: [
+      {
+        "role": "system",
+        "content": "You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown."
+      },
+      {
+        "role": "user",
+        "content": `${userInput.value}`
+      }
+    ],
+  })
+}
 </script>
 
 <style scoped lang="scss">

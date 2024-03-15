@@ -3,6 +3,7 @@ import { CacheEnum } from './../enum/cacheEnum';
 import store from "./store";
 import router from '@/router'
 import userStore from '../store/userStore';
+import sessionStore from '@/store/sessionStore';
 
 export async function login(values: UserLoginType | URLSearchParams) {
   const { access_token } = await userApi.login(values) as any
@@ -20,6 +21,8 @@ export async function login(values: UserLoginType | URLSearchParams) {
 export function logout() {
   store.remove(CacheEnum.TOKEN_NAME)
   router.push('/login')
+  sessionStore().clearAllSession()
+  location.reload()
   userStore().info = null
 }
 export function isLogin() {

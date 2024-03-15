@@ -48,16 +48,15 @@ export default defineStore('session', {
       }
     },
     async pushItemToCurrentSession(data: any) {
-      setTimeout(() => {
-        if (store.get(CacheEnum.TOKEN_NAME)) {
-          console.log('data', data)
-          console.log(this.sessions[this.currentIndex][this.sessions[this.currentIndex].length])
-          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].content += data.content
-          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].id = data.id
-          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].date = new Date().toUTCString()
-          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].role = 'machine'
-        }
-      }, 1000)
+      if (store.get(CacheEnum.TOKEN_NAME)) {
+        const targetSession = this.sessions[this.currentIndex]
+        const targetObj = targetSession[this.sessions[this.currentIndex].length - 1]
+        if (targetObj.content === '...') targetObj.content = ""
+        targetObj.id = data.id
+        targetObj.date = new Date().toUTCString()
+        targetObj.role = 'machine'
+        targetObj.content += data.content
+      }
     },
     async setCurrentConversationIndex(value: number) {
       if (store.get(CacheEnum.TOKEN_NAME)) {
@@ -68,6 +67,11 @@ export default defineStore('session', {
       if (store.get(CacheEnum.TOKEN_NAME)) {
         this.isNeedFlush = !this.isNeedFlush
       }
+    },
+    async clearAllSession() {
+      this.sessions = []
+      this.currentConversationIndex = 0
+      this.currentIndex = 0
     },
   },
   persist: true

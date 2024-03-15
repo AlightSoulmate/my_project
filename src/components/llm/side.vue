@@ -1,27 +1,14 @@
 <template>
-  <div class="h-full flex flex-col p-4 bg-orange-100">
-    <button
-      class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6"
-      @click="createSession"
-    >
+  <div class="h-full flex flex-col p-4 bg-orange-100 border-r-2">
+    <button class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6" @click="createSession">
       <div class="flex items-center">
-        <Newlybuild
-          class="duration-300 icon translate-x-10"
-          theme="filled"
-          size="32"
-          fill="#2d3436"
-        />
+        <Newlybuild class="duration-300 icon translate-x-10" theme="filled" size="32" fill="#2d3436" />
         <div class="duration-300 ml-3 opacity-0">开启新对话</div>
       </div>
     </button>
-    <section
-      class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg"
-    >
-      <historyButton
-        v-for="(session, index) in sessions"
-        class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md"
-        @click="switchSession(index)"
-      >
+    <section class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg shadow-lg">
+      <historyButton v-for="(session, index) in sessions"
+        class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md shadow-sm my-1 py-4" @click="switchSession(index)">
         <template #title> 新的聊天 </template>
         <template #time>
           {{ session[session.length - 1].date }}
@@ -32,8 +19,7 @@
       </historyButton>
     </section>
     <section
-      class="flex my-3 items-center py-2 px-3 bg-white rounded-full duration-300 cursor-pointer hover:bg-zinc-200"
-    >
+      class="flex my-3 items-center py-2 px-3 bg-white rounded-full duration-300 cursor-pointer hover:bg-zinc-200">
       <el-dropdown class="w-full">
         <span class="el-dropdown-link w-full flex items-center">
           <el-avatar :size="40" src="/images/user.png" />
@@ -96,11 +82,13 @@ const switchSession = async (index: number) => {
   &:hover div {
     opacity: 1;
   }
+
   &:hover .icon {
     transform: translateX(-1rem);
   }
 }
-.el-button + .el-button {
+
+.el-button+.el-button {
   margin-left: 0px;
 }
 
@@ -110,18 +98,25 @@ const switchSession = async (index: number) => {
 
 /* 定义滚动条轨道 */
 .card::-webkit-scrollbar-track {
-  background-color: #b8bfc259; /* 设置轨道背景色 */
-  border-radius: 10px; /* 轨道边框圆角 */
+  background-color: #b8bfc259;
+  /* 设置轨道背景色 */
+  border-radius: 10px;
+  /* 轨道边框圆角 */
 }
+
 /* 定义滚动条 */
 .card::-webkit-scrollbar {
-  width: 5px; /* 设置滚动条宽度 */
-  background-color: #f1f1f1; /* 设置滚动条背景色 */
+  width: 5px;
+  /* 设置滚动条宽度 */
+  background-color: #f1f1f1;
+  /* 设置滚动条背景色 */
 }
 
 /* 定义滚动条滑块 */
 .card::-webkit-scrollbar-thumb {
-  background-color: #c4c4c4; /* 设置滑块背景色 */
-  border-radius: 10px; /* 轨道边框圆角 */
+  background-color: #c4c4c4;
+  /* 设置滑块背景色 */
+  border-radius: 10px;
+  /* 轨道边框圆角 */
 }
 </style>

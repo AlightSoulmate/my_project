@@ -3,8 +3,11 @@
     <messageFrame class="my-4" v-for="history in data">
       <template #name> {{ history.role }} </template>
       <template #date> {{ history.date }} </template>
-      <template #content>
-        {{ JSON.parse(history.content).content }}
+      <template v-if="history.role==='machine'" #content>
+        {{ history.content }}
+      </template>
+      <template v-else #content>
+        {{ JSON.parse(history.content) }}
       </template>
     </messageFrame>
   </section>
@@ -14,6 +17,7 @@
 import { getCurrentUser } from "@/apis/userApi";
 import sessionStore, { HistoryType } from "@/store/sessionStore";
 import messageFrame from "./messageFrame.vue";
+import llmStore from "@/store/llmStore";
 const name = ref("");
 const email = ref("");
 getCurrentUser().then((r: any) => {

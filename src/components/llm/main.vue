@@ -19,7 +19,7 @@ import { Search } from "@icon-park/vue-next";
 import { v4 } from 'uuid';
 import drawerVue from "./drawer.vue";
 import messageVue from "./message.vue";
-import { createCompletion } from "@/apis/llmApi";
+import { createCompletion, createCompletionFetch, getStream } from "@/apis/llmApi";
 import llmStore, { LLMResponse } from "@/store/llmStore";
 
 
@@ -29,9 +29,9 @@ const userInput = ref("");
 const handleSubmit = async (e: any) => {
   userInput.value = e;
   try {
-    // 先post再储存到本地
-    createCompletion({
-      ...await llmStore().getConfig(), messages: [
+    getStream({
+      ...await llmStore().getConfig(),
+      messages: [
         {
           "role": "system",
           "content": "You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown."
@@ -41,17 +41,24 @@ const handleSubmit = async (e: any) => {
           "content": `${userInput.value}`
         }
       ],
-    }).then((r: LLMResponse) => {
-      console.log('r', r.choices)
+    }).then((data) => {
+      console.log('data',data)
+      // sessionStore().updateCurrentSession({
+      //   id: v4(),
+      //   content: JSON.stringify({
+      //     content: e
+      //   }),
+      //   role: "user",
+      //   date: new Date().toUTCString()
+      // })
+      // sessionStore().updateCurrentSession({
+      //   date: new Date().toUTCString(),
+      //   id: v4(),
+      //   role: 'machine',
+      //   content: '...'
+      // })
     })
-    sessionStore().updateCurrentSession({
-      id: v4(),
-      content: JSON.stringify({
-        content: e
-      }),
-      role: "user",
-      date: new Date().toUTCString()
-    })
+
   } catch (e) {
     console.error(e);
   }

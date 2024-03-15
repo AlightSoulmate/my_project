@@ -15,7 +15,8 @@ export default defineStore('session', {
     return {
       sessions: [] as HistoryType[][],
       currentIndex: 0,
-      isNeedFlush: true
+      isNeedFlush: true,
+      currentConversationIndex: 0
     }
   },
   actions: {
@@ -44,6 +45,23 @@ export default defineStore('session', {
     async updateCurrentSession(data: HistoryType) {
       if (store.get(CacheEnum.TOKEN_NAME)) {
         this.sessions[this.currentIndex].push(data)
+      }
+    },
+    async pushItemToCurrentSession(data: any) {
+      setTimeout(() => {
+        if (store.get(CacheEnum.TOKEN_NAME)) {
+          console.log('data', data)
+          console.log(this.sessions[this.currentIndex][this.sessions[this.currentIndex].length])
+          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].content += data.content
+          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].id = data.id
+          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].date = new Date().toUTCString()
+          this.sessions[this.currentIndex][this.sessions[this.currentIndex].length].role = 'machine'
+        }
+      }, 1000)
+    },
+    async setCurrentConversationIndex(value: number) {
+      if (store.get(CacheEnum.TOKEN_NAME)) {
+        this.currentConversationIndex = value
       }
     },
     async setFlush() {

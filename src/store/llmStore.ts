@@ -79,6 +79,7 @@ export default defineStore('llm-config', {
         max_tokens: 100,
         temperature: 0.8,
         top_p: 0.8,
+        repetition_penalty: 1.1
       },
       currentData: {}
     }

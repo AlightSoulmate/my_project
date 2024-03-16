@@ -4,14 +4,17 @@
     <el-avatar v-else :size="40" src="/images/robot.png" />
     <div class="flex flex-col w-full pl-3">
       <div class="flex">
-        <div>
+        <div class="font-semibold">
           <slot name="name"></slot>
         </div>
-        <div class="ml-3">
+        <div class="ml-auto">
           <slot name="date"></slot>
         </div>
       </div>
-      <slot name="content"></slot>
+      <div
+        class="content bg-orange-100 w-full rounded-lg px-6 my-4 shadow-lg break-words break-all p-4 overflow-hidden">
+        <slot name="content"></slot>
+      </div>
 
     </div>
   </div>
@@ -20,8 +23,15 @@
 <script setup lang="ts">
 const props = defineProps(['role'])
 const role = ref(props.role)
-console.log('role',role.value)
 
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.content {
+  div {
+    p {
+      @apply py-1;
+    }
+  }
+}
+</style>

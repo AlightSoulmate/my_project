@@ -19,11 +19,29 @@ export async function login(values: UserLoginType | URLSearchParams) {
   }
 }
 export function logout() {
-  store.remove(CacheEnum.TOKEN_NAME)
-  router.push('/login')
-  sessionStore().clearAllSession()
-  location.reload()
-  userStore().info = null
+  ElMessageBox.confirm(
+    '退出登录会清空当下的聊天记录, 确定退出登录吗？',
+    '确认登出',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: '用户已退出登录',
+      })
+      setTimeout(() => {
+        store.remove(CacheEnum.TOKEN_NAME)
+        router.push('/login')
+        sessionStore().clearAllSession()
+        location.reload()
+        userStore().info = null
+      }, 3000)
+    })
+
 }
 export function isLogin() {
   return Boolean(store.get(CacheEnum.TOKEN_NAME))

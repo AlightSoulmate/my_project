@@ -8,15 +8,15 @@ const mdOptions = (Markdown!.Options = {
   breaks: true,      // 转换段落里的 '\n' 到 <br>。
   langPrefix: "language-",
   // 代码高亮
-  highlight(str:any, lang:any) {
+  highlight(str: any, lang: any) {
     if (lang && highlight.getLanguage(lang)) {
       try {
         return (
-          `<div class="bg-orange-100 w-full rounded-lg px-6 my-4 shadow-lg">
-            <code class="w-full px-4 my-2 ">
+          `
+            <code class="w-full px-4 my-2 break-words break-all">
               ${highlight.highlight(lang, str, true).value}
             </code>
-          </div>`
+          `
         );
       } catch (__) { }
     }

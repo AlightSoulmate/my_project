@@ -1,18 +1,12 @@
-import { CacheEnum } from '@/enum/cacheEnum'
-import store from '@/utils/store'
-import { logout } from '@/utils/user'
-import { URLSearchParams } from 'url'
-import { http } from '../plugins/axios/index'
-import { AxiosProgressEvent } from 'axios'
-import llmStore from '@/store/llmStore'
-import { ReadableStreamDefaultReader } from 'stream/web'
 import sessionStore from '@/store/sessionStore'
+import { AxiosProgressEvent } from 'axios'
 import { v4 } from 'uuid'
+import { http } from '../plugins/axios/index'
 
 
 export interface LLMRequestType {
   model: string;
-  messages: string;
+  messages: Message[];
   stream: boolean;
   max_tokens: number;
   temperature: number;

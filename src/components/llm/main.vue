@@ -1,46 +1,55 @@
 <template>
   <el-container class="h-full w-full">
-    <el-main class="main flex" id="main-window">
-      <article class="flex-1">
+    <el-main class="main flex " id="main-window">
+      <article v-if="!isEmpty" class="flex-1">
         <messageVue></messageVue>
       </article>
+      <article v-else class="flex-1 h-full flex flex-col justify-center items-center ">
+        <el-image src="/images/empty.png" fit="contain" :lazy="true" class="py-12 scale-150"></el-image>
+        <h1 class="opacity-70 text-slate-600 mt-6">当前还没有记录, 快去聊聊吧~</h1>
+      </article>
     </el-main>
-    <el-footer class="relative flex justify-center items-center mt-3">
-      <drawerVue></drawerVue>
-      <el-input v-model="userInput" style="width: 600px; height: 60px" size="large" placeholder="想了解点什么~"
-        :suffix-icon="Search" @change="handleSubmit" />
+    <el-footer class="relative flex flex-col justify-center items-center mt-3">
+      <section class="flex-1 flex justify-center items-center mt-4">
+        <drawerVue></drawerVue>
+        <input class="w-[650px] h-[50px] outline-none px-6 rounded-lg duration-300 hover:shadow-md focus:shadow-md"
+          type="text" v-model="userInput" placeholder="想了解点什么~" @keyup.enter="handleSubmit">
+      </section>
+      <section class="text-xs opacity-30 p-1">给出的建议可能会有错误, 请仔细鉴别</section>
     </el-footer>
   </el-container>
 </template>
 
 <script setup lang="ts">
+import { getStream } from "@/apis/llmApi";
+import llmStore from "@/store/llmStore";
 import sessionStore from "@/store/sessionStore";
-import { Search } from "@icon-park/vue-next";
 import { v4 } from 'uuid';
+import { onMounted, ref } from 'vue';
 import drawerVue from "./drawer.vue";
 import messageVue from "./message.vue";
-import { createCompletion, createCompletionFetch, getStream } from "@/apis/llmApi";
-import llmStore, { LLMResponse } from "@/store/llmStore";
-import { ref, onMounted } from 'vue'
+const isEmpty = ref(await sessionStore().isSessionEmpty())
 onMounted(() => {
   const mainWindow = document.getElementById("main-window")
-  mainWindow?.scroll({ top: mainWindow?.scrollHeight, behavior: 'smooth' })
+  mainWindow?.scroll({ top: mainWindow?.scrollHeight })
 })
 
-watch(await sessionStore(), () => {
+watch(await sessionStore(), async () => {
   const mainWindow = document.getElementById("main-window")
-  mainWindow?.scroll({ top: mainWindow?.scrollHeight, behavior: 'smooth' })
+  mainWindow?.scroll({ top: mainWindow?.scrollHeight })
+  isEmpty.value = await sessionStore().isSessionEmpty()
 })
 
 const userInput = ref("");
 
-const handleSubmit = async (e: any) => {
-  userInput.value = e;
+const handleSubmit = async (e: KeyboardEvent) => {
+  const ipt = e.target as HTMLInputElement
+  userInput.value = ipt.value;
   try {
     await sessionStore().updateCurrentSession({
       id: v4(),
       content: JSON.stringify({
-        content: e
+        content: ipt.value
       }),
       role: "user",
       date: new Date().toUTCString()
@@ -59,17 +68,32 @@ const handleSubmit = async (e: any) => {
 };
 
 const dispatch = async () => {
-  const config = await llmStore().getConfig()
+  const config = await llmStore().getConfig() as any
+  const de = await sessionStore().getCurrentSession(await sessionStore().getSessionIndex())
+  const histories: string[] = []
+  de?.forEach(item => {
+    if (item.role === 'user') {
+      histories.push(JSON.parse(item.content).content)
+    } else {
+      if (item.content !== '...') histories.push(item.content)
+    }
+  })
+  const start = histories.length - 10 >= 0 ? histories.length - 10 : 0
+  const slice = histories.slice(start, histories.length - 1)
   getStream({
     ...config,
     messages: [
       {
-        "role": "system",
-        "content": "You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown."
+        role: "system",
+        content: `You are ZISU-LLM旅游小助理, Follow the user's instructions carefully. Respond using markdown format, bold important point, response content needs to be travel-related.`
       },
       {
-        "role": "user",
-        "content": `${userInput.value}`
+        role: "user",
+        content: `These are our conversation histries:${slice}.`
+      },
+      {
+        role: "user",
+        content: `This is what i want know now: ${userInput.value}.`
       }
     ],
   })
@@ -78,23 +102,18 @@ const dispatch = async () => {
 
 <style scoped lang="scss">
 .main::-webkit-scrollbar-track {
-  background-color: #929ca059;
-  /* 设置轨道背景色 */
+  background-color: #b8bfc259;
   border-radius: 10px;
-  /* 轨道边框圆角 */
 }
 
-/* 定义滚动条 */
 .main::-webkit-scrollbar {
   width: 5px;
-  /* 设置滚动条宽度 */
   background-color: #f1f1f1;
-  /* 设置滚动条背景色 */
 }
 
 /* 定义滚动条滑块 */
 .main::-webkit-scrollbar-thumb {
-  background-color: #878b8d;
+  background-color: #c4c4c4;
   /* 设置滑块背景色 */
   border-radius: 10px;
   /* 轨道边框圆角 */

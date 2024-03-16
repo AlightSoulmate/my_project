@@ -42,9 +42,14 @@ export async function getCurrentUser(): Promise<User | undefined> {
       'Authorization': `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
       "Content-Type": "application/json"
     },
-  }).then(r => {
-    if (r) return r
-    logout()
+  }).then((r: any) => {
+    if (r) {
+      if (r?.detail) {
+        logout()
+      } else {
+        return r
+      }
+    }
     return undefined
   })
   return result as User | undefined

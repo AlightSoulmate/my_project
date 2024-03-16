@@ -44,7 +44,11 @@ export default defineStore('session', {
     },
     async updateCurrentSession(data: HistoryType) {
       if (store.get(CacheEnum.TOKEN_NAME)) {
-        this.sessions[this.currentIndex].push(data)
+        if (this.sessions.length === 0) {
+          this.createSession([])
+        } else {
+          this.sessions[this.currentIndex].push(data)
+        }
       }
     },
     async pushItemToCurrentSession(data: any) {
@@ -72,6 +76,16 @@ export default defineStore('session', {
       this.sessions = []
       this.currentConversationIndex = 0
       this.currentIndex = 0
+    },
+    async isSessionEmpty() {
+      if (store.get(CacheEnum.TOKEN_NAME)) {
+        return this.sessions.length === 0
+      }
+    },
+    async deleteSessionCurrent(id: number) {
+      if (store.get(CacheEnum.TOKEN_NAME)) {
+        this.sessions.splice(id, 1)
+      }
     },
   },
   persist: true

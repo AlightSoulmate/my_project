@@ -6,13 +6,6 @@
       </template>
       <template #default>
         <div class="flex flex-col">
-          <!-- <div class="mb-7">
-            <div class="flex">
-              <span class="">是否为流</span>
-              <span class="ml-auto">stream</span>
-            </div>
-            <el-switch v-model="stream" active-text="Open Stream" inactive-text="Close Stream" />
-          </div> -->
           <div class="mb-7">
             <div class="flex">
               <span class="">文本数量</span>
@@ -39,7 +32,7 @@
       </template>
     </el-drawer>
     <div class="duration-300 hover:scale-125">
-      <Config theme="outline" size="28" fill="#a29bfe" class="cursor-pointer" @click="toggleDrawerShow" />
+      <Config theme="outline" size="28" fill="#6a89cc" class="cursor-pointer" @click="toggleDrawerShow" />
     </div>
   </div>
 </template>

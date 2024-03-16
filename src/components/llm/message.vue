@@ -1,13 +1,13 @@
 <template>
   <section class="px-32 flex flex-col">
-    <messageFrame class="my-4" :role="history.role" v-for="history in data">
-      <template #name> {{ history.role }} </template>
-      <template #date> {{ history.date }} </template>
-      <template v-if="history.role==='machine'" #content>
-        <div v-html="md.render(history.content)"></div>
+    <messageFrame class="my-4" :role="history?.role" v-for="history in data">
+      <template #name> {{ history?.role === 'machine' ? 'ZISU旅游小助理' : '你' }} </template>
+      <template #date> {{ history?.date && new Date(history.date).toLocaleString() }} </template>
+      <template class="py-4" v-if="history?.role === 'machine'" #content>
+        <div v-html="md.render(history?.content)"></div>
       </template>
-      <template v-else-if="history.role==='user'" #content>
-        {{ JSON.parse(history.content).content }}
+      <template v-else-if="history?.role==='user'" #content>
+        {{ JSON.parse(history?.content).content }}
       </template>
     </messageFrame>
   </section>

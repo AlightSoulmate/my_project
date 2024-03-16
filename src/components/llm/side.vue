@@ -9,12 +9,15 @@
     <section class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg shadow-lg">
       <historyButton v-for="(session, index) in sessions"
         class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md shadow-sm my-1 py-4" @click="switchSession(index)">
-        <template #title> 新的聊天 </template>
+        <template #title> 聊天记录{{ index + 1 }} </template>
         <template #time>
-          {{ session[session.length - 1].date }}
+          {{ session[session.length - 1]?.date }}
         </template>
         <template #length>
           {{ session.length + "条信息" }}
+        </template>
+        <template #delete>
+          <delete-three @click="sessionStore().deleteSessionCurrent(index)" theme="outline" size="18" fill="#FA5C5C" />
         </template>
       </historyButton>
     </section>
@@ -44,29 +47,19 @@ import { logout } from "@/utils/user";
 import { Newlybuild } from "@icon-park/vue-next";
 import { v4 } from "uuid";
 import historyButton from "./historyButton.vue";
+import {DeleteThree} from '@icon-park/vue-next'
 const sessions = ref(await sessionStore().getSessions());
 const name = ref("");
 const email = ref("");
 const createSession = async () => {
-  sessionStore().createSession([
-    {
-      id: v4(),
-      role: "user",
-      content: JSON.stringify({
-        content: "hi",
-      }),
-      date: new Date().toUTCString(),
-    },
-  ]);
+  sessionStore().createSession([]);
 };
 await getCurrentUser().then((r: User | undefined) => {
   name.value = r!.name;
   email.value = r!.email;
 });
 
-const handleClick = () => {
-  console.log("click");
-};
+
 
 const switchSession = async (index: number) => {
   const session = sessionStore();
@@ -96,27 +89,18 @@ const switchSession = async (index: number) => {
   padding: 24px;
 }
 
-/* 定义滚动条轨道 */
 .card::-webkit-scrollbar-track {
   background-color: #b8bfc259;
-  /* 设置轨道背景色 */
   border-radius: 10px;
-  /* 轨道边框圆角 */
 }
 
-/* 定义滚动条 */
 .card::-webkit-scrollbar {
   width: 5px;
-  /* 设置滚动条宽度 */
   background-color: #f1f1f1;
-  /* 设置滚动条背景色 */
 }
 
-/* 定义滚动条滑块 */
 .card::-webkit-scrollbar-thumb {
   background-color: #c4c4c4;
-  /* 设置滑块背景色 */
   border-radius: 10px;
-  /* 轨道边框圆角 */
 }
 </style>

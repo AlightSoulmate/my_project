@@ -2,6 +2,7 @@ import sessionStore from '@/store/sessionStore'
 import { AxiosProgressEvent } from 'axios'
 import { v4 } from 'uuid'
 import { http } from '../plugins/axios/index'
+import { url } from '@/utils/url';
 
 
 export interface LLMRequestType {
@@ -50,7 +51,7 @@ export function createCompletion(data: LLMRequestType) {
   })
 }
 export function createCompletionFetch(data: LLMRequestType) {
-  return fetch('http://127.0.0.1:5173/api/llm/completions', {
+  return fetch(`${url}/llm/completions`, {
     method: 'post',
     headers: {
       "Content-Type": "application/json"
@@ -63,7 +64,7 @@ export function createCompletionFetch(data: LLMRequestType) {
 
 
 export async function getStream(data: LLMRequestType) {
-  const res = await fetch("/api/llm/completions", {
+  const res = await fetch(`${url}/llm/completions`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"

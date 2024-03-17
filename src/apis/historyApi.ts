@@ -1,6 +1,9 @@
 import { CacheEnum } from '@/enum/cacheEnum'
 import store from '@/utils/store'
 import { http } from '../plugins/axios/index'
+import envs from '@/utils/env'
+import { url } from '@/utils/url'
+
 export interface HistoryType {
   id?: number
   owner_id?: number
@@ -8,7 +11,7 @@ export interface HistoryType {
 }
 
 export function createConversation(userId: number, data: string) {
-  return fetch(`http://127.0.0.1:5173/api/user/${userId}/history`, {
+  return fetch(`${url}/user/${userId}/history`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,

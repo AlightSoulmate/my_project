@@ -1,7 +1,8 @@
 import highlight from "highlight.js";
 import 'highlight.js/styles/github.css';
 import Markdown from "markdown-it";
-const mdOptions = (Markdown!.Options = {
+
+const mdOptions = {
   html: true,        // 在源码中启用 HTML 标签
   linkify: true,     // 将类似 URL 的文本自动转换为链接。
   typographer: true, // 双 + 单引号替换对，当 typographer 启用时。
@@ -22,6 +23,7 @@ const mdOptions = (Markdown!.Options = {
     }
     return "";
   },
-})
+}
 
-export const md = new Markdown(mdOptions);
+// export const md = new Markdown(mdOptions);
+export const md = new Markdown(mdOptions)

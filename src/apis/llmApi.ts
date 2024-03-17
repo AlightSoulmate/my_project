@@ -28,12 +28,14 @@ export function createCompletion(data: LLMRequestType) {
     method: 'post',
     responseType: 'stream',
     async onDownloadProgress(progressEvent: AxiosProgressEvent) {
-      const responseStream = progressEvent.event?.currentTarget.response as string
+      const responseStream = (progressEvent?.event?.currentTarget! as any).response as UnderlyingByteSource
       const res = new ReadableStream(responseStream)
       const reader = res.pipeThrough(new TextDecoderStream()).getReader()
       // 读取并处理流中的数据
       while (true) {
-        const { done, value } = await reader.read()
+        const done = (await reader.read()).done
+        const value = (await reader.read()).value as any
+        // const { done, value } = await reader.read()
         if (done) break
 
         const chunk = value ? new TextDecoder().decode(value) : ''

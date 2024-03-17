@@ -2,8 +2,9 @@ import sessionStore from '@/store/sessionStore'
 import { AxiosProgressEvent } from 'axios'
 import { v4 } from 'uuid'
 import { http } from '../plugins/axios/index'
-import { url } from '@/utils/url';
-
+import { env } from 'process';
+const url = '/api'
+const prodUrl = "http://127.0.0.1:3000/api"
 
 export interface LLMRequestType {
   model: string;

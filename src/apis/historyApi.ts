@@ -2,7 +2,6 @@ import { CacheEnum } from '@/enum/cacheEnum'
 import store from '@/utils/store'
 import { http } from '../plugins/axios/index'
 import envs from '@/utils/env'
-import { url } from '@/utils/url'
 import { env } from 'process'
 
 export interface HistoryType {

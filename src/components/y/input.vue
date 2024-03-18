@@ -1,15 +1,12 @@
 <template>
-  <input
-    type="text"
-    class="y_input"
-    :value="props.modelValue"
-    @input="$emit('update:modelValue', ($event!.target! as any).value!)"
-  />
+  <input :type="isPassword ? 'password' : 'text'" class="y_input" :value="props.modelValue"
+    @input="$emit('update:modelValue', ($event!.target! as any).value!)" />
 </template>
 
 <script setup lang="ts">
 const props = defineProps({
   modelValue: String,
+  isPassword: Boolean
 });
 </script>
 

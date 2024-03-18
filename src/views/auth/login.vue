@@ -1,30 +1,20 @@
 <template>
-  <form class @submit="onSubmit">
-    <div
-      class="w-[720px] h-[500px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0"
-    >
+  <form class="w-full h-screen" @submit="onSubmit">
+
+    <div class="w-[720px] h-[500px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
       <div class="p-6 flex flex-col justify-between">
         <div>
           <h2 class="text-center text-gray-700 text-lg">用户登陆</h2>
           <div class="mt-8">
             <yInput v-model="values.account" @input="validate"></yInput>
             <Error :error="errors.account"></Error>
-            <yInput
-              v-model="values.password"
-              class="mt-5"
-              @input="validate"
-            ></yInput>
+            <yInput v-model="values.password" class="mt-5" @input="validate" :isPassword="true"></yInput>
             <Error :error="errors.password"></Error>
           </div>
           <YButton class="w-full">登录</YButton>
           <div class="flex justify-center mt-3">
-            <icon-wechat
-              theme="outline"
-              size="24"
-              fill="#fff"
-              class="bg-green-600 text-white rounded-full p-1 cursor-pointer"
-              aria-hidden="true"
-            />
+            <icon-wechat theme="outline" size="24" fill="#fff"
+              class="bg-green-600 text-white rounded-full p-1 cursor-pointer" aria-hidden="true" />
           </div>
         </div>
         <div class="flex gap-3 justify-center mt-10">
@@ -33,10 +23,7 @@
         </div>
       </div>
       <div class="hidden md:block relative">
-        <img
-          src="/images/login.jpg"
-          class="absolute h-full w-full object-cover"
-        />
+        <img src="/images/login.jpg" class="absolute h-full w-full object-cover" />
       </div>
     </div>
   </form>

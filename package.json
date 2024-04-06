@@ -23,6 +23,7 @@
     "axios": "^1.2.0",
     "dotenv": "^16.4.5",
     "echarts": "^5.4.1",
+    "element-china-area-data": "^6.1.0",
     "element-plus": "^2.2.28",
     "gsap": "^3.11.4",
     "highlight.js": "^11.9.0",
@@ -38,6 +39,7 @@
     "uuid": "^9.0.1",
     "vee-validate": "^4.5.8",
     "vue": "^3.2.41",
+    "vue-area-linkage": "^5.1.0",
     "vue-router": "4",
     "wangeditor": "^4.7.15",
     "yup": "^0.32.11"

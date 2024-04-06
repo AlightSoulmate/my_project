@@ -11,9 +11,10 @@
     </el-main>
     <el-footer class="relative flex flex-col justify-center items-center mt-3">
       <section class="flex-1 flex justify-center items-center mt-4">
-        <drawerVue></drawerVue>
+        <drawer></drawer>
         <input class="w-[650px] h-[50px] outline-none px-6 rounded-lg duration-300 hover:shadow-md focus:shadow-md"
           type="text" v-model="userInput" placeholder="想了解点什么~" @keyup.enter="handleSubmit">
+        <finetune></finetune>
       </section>
       <section class="text-xs opacity-30 p-1">给出的建议可能会有错误, 请仔细鉴别</section>
     </el-footer>
@@ -26,8 +27,9 @@ import llmStore from "@/store/llmStore";
 import sessionStore from "@/store/sessionStore";
 import { v4 } from 'uuid';
 import { onMounted, ref } from 'vue';
-import drawerVue from "./drawer.vue";
+import drawer from "./drawer.vue";
 import messageVue from "./message.vue";
+import finetune from './finetune.vue';
 const isEmpty = ref(await sessionStore().isSessionEmpty())
 onMounted(() => {
   const mainWindow = document.getElementById("main-window")

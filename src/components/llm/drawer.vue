@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { ElNotification } from "element-plus";
 import { defineEmits } from "vue";
-import { Config } from "@icon-park/vue-next";
+import { Config, Equalizer } from "@icon-park/vue-next";
 import llmStore from "@/store/llmStore";
 const conf = llmStore()
 

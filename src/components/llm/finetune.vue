@@ -1,6 +1,6 @@
 <template>
   <div class="pl-3">
-    <el-drawer title="自定义你的旅游助理" size="700px" v-model="isDrawerShow" direction="rtl">
+    <el-drawer title="模型微调与部署 ( Root )" size="700px" v-model="isDrawerShow" direction="rtl">
       <Area />
     </el-drawer>
     <div class="duration-300 hover:scale-125">

@@ -37,32 +37,38 @@
           <el-slider v-model="maxSamples" :step=10 show-stops :min="1" :max="1000" show-input />
         </div>
       </div>
+      <div v-if="mode">
+        <el-switch v-model="isMulti" active-text="多轮对话" inactive-text="单轮对话" />
+      </div>
       <el-popconfirm v-if="!mode" title="确认微调配置无误" @confirm="requestFinetune">
         <template #reference>
           <el-button class="w-full" type="primary" size="default" :disabled="isRunning">微调</el-button>
         </template>
       </el-popconfirm>
     </section>
-    <el-popconfirm v-if="mode" title="请确认区域选择无误" @confirm="fullAuto">
-      <template #reference>
-        <el-button class="w-full" type="primary" size="default" :disabled="isRunning">一键微调</el-button>
-      </template>
-    </el-popconfirm>
     <el-divider />
     <section class="w-5/6">
       <h1 class="mb-3 text-lg font-bold">模型导出</h1>
       <div class="flex flex-col gap-3">
         <el-input v-model="exportModelName" class="w-full mb-3" placeholder="请输入要导出的模型名称, 必须为英文" />
       </div>
-      <el-button class="w-full" type="primary" size="default" :disabled="isRunning" @click="exportModel">导出</el-button>
+      <el-button v-if="!mode" class="w-full" type="primary" size="default" :disabled="isRunning"
+        @click="exportModel">导出</el-button>
     </section>
     <el-divider />
-    <section class="w-5/6">
+    <section class="w-5/6" v-if="!mode">
       <h1 class="text-lg font-bold mb-3">模型部署</h1>
       <el-cascader v-if="!mode" placeholder="选择要部署的模型" class="w-full mb-2" size="large" :options="models"
         v-model="deployModelName">
       </el-cascader>
-      <el-button class="w-full" type="primary" size="default" :disabled="isRunning" @click="deploy">部署</el-button>
+      <el-button class="w-full" type="primary" size="default" :disabled="isRunning" @click="deployModel">部署</el-button>
+    </section>
+    <section class="w-5/6" v-if="mode">
+      <el-popconfirm title="请确认区域选择无误" @confirm="fullAuto">
+        <template #reference>
+          <el-button class="w-full" type="primary" size="default" :disabled="isRunning">一键微调</el-button>
+        </template>
+      </el-popconfirm>
     </section>
   </div>
 </template>
@@ -73,19 +79,23 @@ import {
   pcTextArr
 } from "element-china-area-data";
 import { CSSProperties, watch, onBeforeMount } from 'vue'
+import { ElNotification } from 'element-plus'
+
 enum COLOR {
   ERROR = "#eb2f06",
   INIT = "#ffffff",
   BEGIN = "#0c2461",
   AFTER_CRAWL = "#38ada9",
   AFTER_FINETUNE = "#b8e994",
-  SUCCESS = "#2ed573"
+  AFTER_EXPORT = "#b8e994",
+  SUCCESS = "#6ab04c"
 }
 enum PERCENTAGE {
   INIT = 0,
   BEGIN = 20,
   AFTER_CRAWL = 40,
-  AFTER_FINETUNE = 90,
+  AFTER_FINETUNE = 60,
+  AFTER_EXPORT = 80,
   SUCCESS = 100
 }
 
@@ -113,6 +123,7 @@ const mode = ref(false)
 const models = ref<any>([])
 const exportModelName = ref("")
 const deployModelName = ref("")
+const isMulti = ref(false)
 
 const marks = reactive<Marks>({
   80: '较少数据',
@@ -123,88 +134,6 @@ const marks = reactive<Marks>({
 
 const percentage = ref<PERCENTAGE>(PERCENTAGE.INIT)
 const color = ref<COLOR>(COLOR.INIT)
-
-
-watch(() => selectedOptions.value, (newValue) => {
-  crawlCity.value = newValue.join("")
-})
-
-const toggleDisabled = () => {
-  isRunning.value = !isRunning.value
-}
-
-const requestFinetune = () => {
-  http.request({
-    url: "/llm/finetune",
-    method: "POST",
-    data: {
-      data_path: selectName.value[0],
-      max_samples: maxSamples.value
-    }
-  }).then(res => {
-    if (res.status === 'success') {
-      console.log('finetune res', res)
-      percentage.value = PERCENTAGE.AFTER_FINETUNE
-      color.value = COLOR.AFTER_FINETUNE
-    } else {
-      console.error("Error: 微调错误")
-    }
-  })
-}
-
-const requestCrawl = () => {
-  toggleDisabled()
-  percentage.value = PERCENTAGE.BEGIN
-  color.value = COLOR.BEGIN
-  http.request({
-    url: "/llm/crawl",
-    method: 'POST',
-    data: {
-      city: crawlCity.value,
-      amount: crawlAmount.value
-    }
-  }).then((res) => {
-    if (res.status === "success") {
-      console.log('res', res)
-      // toggleDisabled()
-      percentage.value = PERCENTAGE.AFTER_CRAWL
-      color.value = COLOR.AFTER_CRAWL
-      // 更新路径
-      getDataPath()
-    } else {
-      console.error("Error: 数据采集错误")
-    }
-  }).finally(() => {
-    toggleDisabled()
-  })
-}
-
-const fullAuto = () => {
-  toggleDisabled()
-  percentage.value = PERCENTAGE.BEGIN
-  color.value = COLOR.BEGIN
-  http.request({
-    url: "/llm/crawl",
-    method: 'POST',
-    data: {
-      city: crawlCity.value,
-      amount: crawlAmount.value
-    }
-  }).then((res) => {
-    if (res.status === "success") {
-      console.log('res', res)
-      // toggleDisabled()
-      percentage.value = PERCENTAGE.AFTER_CRAWL
-      color.value = COLOR.AFTER_CRAWL
-      // 微调
-      requestFinetune()
-    } else {
-      console.error("Error: 数据采集错误")
-    }
-  }).finally(() => {
-    toggleDisabled()
-  })
-}
 
 interface DataPath {
   names: string[]
@@ -244,7 +173,77 @@ const getModels = () => {
   })
 }
 
+
+watch(() => selectedOptions.value, (newValue) => {
+  crawlCity.value = newValue.join("")
+})
+
+const toggleDisabled = () => {
+  isRunning.value = !isRunning.value
+}
+
+const requestCrawl = () => {
+  toggleDisabled()
+  percentage.value = PERCENTAGE.BEGIN
+  color.value = COLOR.BEGIN
+  http.request({
+    url: "/llm/crawl",
+    method: 'POST',
+    data: {
+      city: crawlCity.value,
+      amount: crawlAmount.value
+    }
+  }).then((res) => {
+    if (res.status === "success") {
+      console.log('res', res)
+      // toggleDisabled()
+      percentage.value = PERCENTAGE.AFTER_CRAWL
+      color.value = COLOR.AFTER_CRAWL
+      // 更新路径
+      getDataPath()
+    } else {
+      console.error("Error: 数据采集错误")
+    }
+  }).finally(() => {
+    toggleDisabled()
+  })
+}
+
+const requestFinetune = () => {
+  ElNotification({
+    title: "进度信息",
+    message: '模型微调中...',
+    type: 'info',
+  })
+  http.request({
+    url: "/llm/finetune",
+    method: "POST",
+    data: {
+      data_path: selectName.value[0].slice(0, -5),
+      max_samples: maxSamples.value
+    }
+  }).then(res => {
+    if (res.status === 'success') {
+      ElNotification({
+        title: "进度信息",
+        message: '模型微调完成',
+        type: 'success',
+      })
+      percentage.value = PERCENTAGE.AFTER_FINETUNE
+      color.value = COLOR.AFTER_FINETUNE
+    } else {
+      console.error("Error: 微调错误")
+    }
+  })
+}
+
+
 const exportModel = () => {
+  ElNotification({
+    title: "进度信息",
+    message: '模型导出中...',
+    type: 'info',
+  })
   http.request({
     url: "/llm/export",
     method: "POST",
@@ -252,20 +251,135 @@ const exportModel = () => {
       dir_name: exportModelName.value
     }
   }).then((res) => {
+    ElNotification({
+      title: "进度信息",
+      message: '模型导出完毕',
+      type: 'success',
+    })
     getModels()
   })
 }
 
-const deploy = () => {
+const deployModel = () => {
+  ElNotification({
+    title: "进度信息",
+    message: '部署中...',
+    type: 'info',
+  })
   http.request({
     url: "/llm/deploy",
     method: "POST",
     data: {
       name: deployModelName.value[0]
     }
+  }).then(() => {
+    ElNotification({
+      title: "进度信息",
+      message: '部署完毕',
+      type: 'success',
+    })
   })
 }
 
+const fullAuto = () => {
+  ElNotification({
+    title: "进度信息",
+    message: '一键部署开始',
+    type: 'info',
+  })
+  toggleDisabled()
+  percentage.value = PERCENTAGE.BEGIN
+  color.value = COLOR.BEGIN
+  http.request({
+    url: "/llm/crawl",
+    method: 'POST',
+    data: {
+      city: crawlCity.value,
+      amount: crawlAmount.value
+    }
+  }).then((res) => {
+    if (res.status === "success") {
+      ElNotification({
+        title: "进度信息",
+        message: '数据采集完成',
+        type: 'success',
+      })
+      percentage.value = PERCENTAGE.AFTER_CRAWL
+      color.value = COLOR.AFTER_CRAWL
+
+      ElNotification({
+        title: "进度信息",
+        message: '模型微调中...',
+        type: 'info',
+      })
+      http.request({
+        url: "/llm/finetune",
+        method: "POST",
+        data: {
+          data_path: isMulti ? crawlCity.value + '_more.json' : crawlCity.value + '.json',
+          max_samples: maxSamples.value
+        }
+      }).then(res => {
+        if (res.status === 'success') {
+          ElNotification({
+            title: "进度信息",
+            message: '模型微调完成',
+            type: 'success',
+          })
+          percentage.value = PERCENTAGE.AFTER_FINETUNE
+          color.value = COLOR.AFTER_FINETUNE
+          ElNotification({
+            title: "进度信息",
+            message: '模型导出中...',
+            type: 'info',
+          })
+          http.request({
+            url: "/llm/export",
+            method: "POST",
+            data: {
+              dir_name: exportModelName.value
+            }
+          }).then((res) => {
+            ElNotification({
+              title: "进度信息",
+              message: '模型导出完毕',
+              type: 'success',
+            })
+            percentage.value = PERCENTAGE.AFTER_EXPORT
+            color.value = COLOR.AFTER_EXPORT
+            getModels()
+            ElNotification({
+              title: "进度信息",
+              message: '部署中...',
+              type: 'info',
+            })
+            http.request({
+              url: "/llm/deploy",
+              method: "POST",
+              data: {
+                name: exportModel.name
+              }
+            }).then(() => {
+              percentage.value = PERCENTAGE.SUCCESS
+              color.value = COLOR.SUCCESS
+              ElNotification({
+                title: "进度信息",
+                message: '部署完毕, 一键部署自动化完成',
+                type: 'success',
+              })
+            })
+          })
+        } else {
+          console.error("Error: 微调错误")
+        }
+      })
+    } else {
+      console.error("Error: 数据采集错误")
+    }
+  }).finally(() => {
+    toggleDisabled()
+  })
+}
 /**
  * 微调页面打开前, 获取数据文件的名称
 */

@@ -251,6 +251,8 @@ const exportModel = () => {
       dir_name: exportModelName.value
     }
   }).then((res) => {
+    percentage.value = PERCENTAGE.AFTER_EXPORT
+    color.value = COLOR.AFTER_EXPORT
     ElNotification({
       title: "进度信息",
       message: '模型导出完毕',
@@ -295,9 +297,10 @@ const fullAuto = () => {
     method: 'POST',
     data: {
       city: crawlCity.value,
-      amount: crawlAmount.value
+      amount: crawlAmount.value,
+      is_multi: isMulti.value
     }
-  }).then((res) => {
+  }).then((res:any) => {
     if (res.status === "success") {
       ElNotification({
         title: "进度信息",
@@ -316,7 +319,7 @@ const fullAuto = () => {
         url: "/llm/finetune",
         method: "POST",
         data: {
-          data_path: isMulti ? crawlCity.value + '_more.json' : crawlCity.value + '.json',
+          data_path: isMulti ? res.data.map_name  : res.data.map_name + '_more',
           max_samples: maxSamples.value
         }
       }).then(res => {

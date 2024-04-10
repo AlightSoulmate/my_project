@@ -300,7 +300,7 @@ const fullAuto = () => {
       amount: crawlAmount.value,
       is_multi: isMulti.value
     }
-  }).then((res:any) => {
+  }).then((res: any) => {
     if (res.status === "success") {
       ElNotification({
         title: "进度信息",
@@ -319,8 +319,9 @@ const fullAuto = () => {
         url: "/llm/finetune",
         method: "POST",
         data: {
-          data_path: isMulti ? res.data.map_name  : res.data.map_name + '_more',
-          max_samples: maxSamples.value
+          data_path: isMulti ? res.data.map_name : res.data.map_name + '_more',
+          max_samples: maxSamples.value,
+          is_multi: isMulti.value
         }
       }).then(res => {
         if (res.status === 'success') {

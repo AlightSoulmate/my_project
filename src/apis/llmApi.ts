@@ -4,7 +4,7 @@ import { v4 } from 'uuid'
 import { http } from '../plugins/axios/index'
 import { env } from 'process';
 const url = '/api'
-const prodUrl = "http://127.0.0.1:3000/api"
+const prodUrl = "http://127.0.0.1:8000/api"
 
 export interface LLMRequestType {
   model: string;
@@ -52,7 +52,7 @@ export function createCompletion(data: LLMRequestType) {
   })
 }
 export function createCompletionFetch(data: LLMRequestType) {
-  return fetch(`${url}/llm/completions`, {
+  return fetch(`${prodUrl}/llm/completions`, {
     method: 'post',
     headers: {
       "Content-Type": "application/json"
@@ -65,7 +65,7 @@ export function createCompletionFetch(data: LLMRequestType) {
 
 
 export async function getStream(data: LLMRequestType) {
-  const res = await fetch(`${url}/llm/completions`, {
+  const res = await fetch(`${prodUrl}/llm/completions`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"

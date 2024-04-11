@@ -1,6 +1,6 @@
 import { CacheEnum } from './../../enum/cacheEnum'
 import store from '@/utils/store'
-import axios, { AxiosInstance,  AxiosRequestConfig } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import router from '@/router'
 
 export default class Axios {

@@ -13,8 +13,8 @@ export interface HistoryType {
 export function createConversation(userId: number, data: string) {
   // const url = env.DEV_MODE ? env.DEV_BACKEND_URL : env.PRODUCTION_BACKEND_URL
   const url = '/api'
-  const prodUrl = "http://127.0.0.1:3000/api"
-  return fetch(`${url}/user/${userId}/history`, {
+  const prodUrl = "http://127.0.0.1:8000/api"
+  return fetch(`${prodUrl}/user/${userId}/history`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,

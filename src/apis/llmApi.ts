@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 import sessionStore from '@/store/sessionStore';
 import { v4 } from 'uuid';
+=======
+import sessionStore from '@/store/sessionStore'
+import { AxiosProgressEvent } from 'axios'
+import { v4 } from 'uuid'
+import { http } from '../plugins/axios/index'
+import { env } from 'process';
+const url = '/api'
+const prodUrl = "http://127.0.0.1:8000/api"
+>>>>>>> e5ea5b967028699b9f0a41c1736fcf5a659b67d7
 
 interface Message {
   role: string;

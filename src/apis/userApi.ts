@@ -1,14 +1,8 @@
-import store from '@/utils/store'
-import { http } from '../plugins/axios/index'
 import { CacheEnum } from '@/enum/cacheEnum'
-import { Header } from 'element-plus/es/components/table-v2/src/components'
-import axios, { RawAxiosRequestHeaders } from 'axios'
-import Axios from '@/plugins/axios/Axios'
-import { URLSearchParams } from 'url'
-import { useRouter } from 'vue-router'
-import router from '@/router'
-import userStore from '@/store/userStore'
+import store from '@/utils/store'
 import { logout } from '@/utils/user'
+import { URLSearchParams } from 'url'
+import { http } from '../plugins/axios/index'
 export interface AuthReturnType {
   access_token: string
   token_type: string

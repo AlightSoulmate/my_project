@@ -105,10 +105,6 @@ interface Mark {
 }
 
 type Marks = Record<number, Mark | string>
-enum Mode {
-  SEMI_AUTO = "semi",
-  FULL_AUTO = "full"
-}
 
 // 省市 && 城市数据, 支持到二级地区
 const cities = pcTextArr as any
@@ -191,7 +187,8 @@ const requestCrawl = () => {
     method: 'POST',
     data: {
       city: crawlCity.value,
-      amount: crawlAmount.value
+      amount: crawlAmount.value,
+      is_multi: 0
     }
   }).then((res) => {
     if (res.status === "success") {
@@ -220,7 +217,8 @@ const requestFinetune = () => {
     method: "POST",
     data: {
       data_path: selectName.value[0].slice(0, -5),
-      max_samples: maxSamples.value
+      max_samples: maxSamples.value,
+      is_multi: selectName.value[0].endsWith('_more.json') ? 1 : 0
     }
   }).then(res => {
     if (res.status === 'success') {
@@ -298,7 +296,7 @@ const fullAuto = () => {
     data: {
       city: crawlCity.value,
       amount: crawlAmount.value,
-      is_multi: isMulti.value
+      is_multi: isMulti.value ? 1 : 0
     }
   }).then((res: any) => {
     if (res.status === "success") {
@@ -307,6 +305,7 @@ const fullAuto = () => {
         message: '数据采集完成',
         type: 'success',
       })
+      console.log(res.data.map_name)
       percentage.value = PERCENTAGE.AFTER_CRAWL
       color.value = COLOR.AFTER_CRAWL
 

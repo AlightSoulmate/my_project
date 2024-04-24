@@ -12,3 +12,5 @@ declare module "*.vue" {
   export default Component
 }
 declare module '*.ts'
+
+declare module 'vue-area-linkage'

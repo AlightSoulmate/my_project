@@ -1,11 +1,10 @@
-import sessionStore from '@/store/sessionStore'
-import { AxiosProgressEvent } from 'axios'
-import { v4 } from 'uuid'
-import { http } from '../plugins/axios/index'
-import { env } from 'process';
-const url = '/api'
-const prodUrl = "http://127.0.0.1:3000/api"
+import sessionStore from '@/store/sessionStore';
+import { v4 } from 'uuid';
 
+interface Message {
+  role: string;
+  content: string;
+}
 export interface LLMRequestType {
   model: string;
   messages: Message[];
@@ -15,57 +14,11 @@ export interface LLMRequestType {
   top_p: number;
 }
 
-interface Message {
-  role: string;
-  content: string;
-}
-
 /**
- * 向LLM发送请求
+ * 获取对话, 以流式渲染
 */
-
-export function createCompletion(data: LLMRequestType) {
-  return http.request({
-    url: '/llm/completions',
-    method: 'post',
-    responseType: 'stream',
-    async onDownloadProgress(progressEvent: AxiosProgressEvent) {
-      const responseStream = (progressEvent?.event?.currentTarget! as any).response as UnderlyingByteSource
-      const res = new ReadableStream(responseStream)
-      const reader = res.pipeThrough(new TextDecoderStream()).getReader()
-      // 读取并处理流中的数据
-      while (true) {
-        const done = (await reader.read()).done
-        const value = (await reader.read()).value as any
-        // const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = value ? new TextDecoder().decode(value) : ''
-        // 在这里处理每个数据块
-        console.log('Received chunk:', chunk)
-      }
-
-      // 所有数据已接收完毕
-      console.log('All data received.')
-    },
-    data
-  })
-}
-export function createCompletionFetch(data: LLMRequestType) {
-  return fetch(`${url}/llm/completions`, {
-    method: 'post',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      ...data
-    })
-  })
-}
-
-
 export async function getStream(data: LLMRequestType) {
-  const res = await fetch(`${url}/llm/completions`, {
+  const res = await fetch(`/api/llm/completions`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
@@ -94,11 +47,7 @@ export async function getStream(data: LLMRequestType) {
       }
     } catch (e) {
       console.error(e)
+      return
     }
   }
 }
-
-
-
-
-export default { createCompletion }

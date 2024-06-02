@@ -27,8 +27,8 @@ git clone https://github.com/emVisible/emLLM-front.git
 ```
 
 ```
-进入开发模式，指定host和port，若端口冲突请关闭冲突端口进程
-> yarn dev --host 127.0.0.1 --port 8000
+进入开发模式，若端口冲突请关闭冲突端口进程
+> yarn dev
 ```
 
 ```

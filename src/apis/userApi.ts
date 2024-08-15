@@ -31,7 +31,7 @@ export interface User {
 */
 export async function getCurrentUser(): Promise<User | undefined> {
   const result = await http.request({
-    url: "/current",
+    url: "/base/current",
     headers: {
       'Authorization': `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
       "Content-Type": "application/json"
@@ -54,7 +54,7 @@ export async function getCurrentUser(): Promise<User | undefined> {
 */
 export function registry(data: UserRegistryType) {
   return http.request({
-    url: '/registry',
+    url: '/base/registry',
     method: 'post',
     data: {
       ...data
@@ -68,7 +68,7 @@ export function registry(data: UserRegistryType) {
 */
 export function login(data: UserLoginType | URLSearchParams) {
   return http.request({
-    url: '/auth',
+    url: '/base/auth',
     method: 'post',
     data
   })

@@ -4,21 +4,34 @@ import { v4 } from 'uuid';
 interface Message {
   role: string;
   content: string;
+  user?: string
+  tool_calls?: string[]
 }
 export interface LLMRequestType {
-  model: string;
-  messages: Message[];
-  stream: boolean;
-  max_tokens: number;
-  temperature: number;
-  top_p: number;
+  prompt: string
+  system_prompt?: string
+  chat_history?: Message[]
+}
+
+export interface StreamDataType {
+  choices: Array<{
+    delta: {
+      content: string
+    }
+    finish_reason: null | string
+    index: number
+  }>
+  created: number
+  id: string
+  model: string
+  object: string
 }
 
 /**
- * 获取对话, 以流式渲染
+ * 获取对话, 以XINFERENCE接口流式渲染
 */
 export async function getStream(data: LLMRequestType) {
-  const res = await fetch(`/api/llm/completions`, {
+  const res = await fetch(`/api/llm/chat`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
@@ -28,26 +41,29 @@ export async function getStream(data: LLMRequestType) {
     })
   });
   const reader = res.body!.getReader();
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
+  let signal = false;
+  while (!signal) {
+    const { value } = await reader.read()
     const chunk = value ? new TextDecoder().decode(value) : ''
-    const part = chunk.split("data:")[1]
-    try {
-      if (part.match(/\[DONE\]/)) {
-      } else {
-        const postProcessData = JSON.parse(part)
-        const item = {
-          id: v4(),
-          date: new Date().toUTCString(),
-          role: 'machine',
-          content: postProcessData.choices[0].delta.content
+    if (chunk) {
+      chunk.split("\n").forEach(ck => {
+        if (ck !== '') {
+          const postProcessData: StreamDataType = JSON.parse(ck)
+          if (postProcessData.choices[0].finish_reason !== null) signal = true
+          try {
+            const item = {
+              id: v4(),
+              date: new Date().toUTCString(),
+              role: 'machine',
+              content: postProcessData.choices[0].delta.content
+            }
+            sessionStore().pushItemToCurrentSession(item)
+          } catch (e) {
+            console.error(e)
+            return
+          }
         }
-        sessionStore().pushItemToCurrentSession(item)
-      }
-    } catch (e) {
-      console.error(e)
-      return
+      })
     }
   }
 }

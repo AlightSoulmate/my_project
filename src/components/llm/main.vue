@@ -83,19 +83,20 @@ const dispatch = async () => {
   const start = histories.length - 10 >= 0 ? histories.length - 10 : 0
   const slice = histories.slice(start, histories.length - 1)
   getStream({
-    ...config,
-    messages: [
+    prompt:userInput.value,
+    system_prompt: "",
+    chat_history: [
       {
         role: "system",
-        content: `You are 浙外旅游小助手, Follow the user's instructions carefully. Respond using markdown format, bold important point, response content needs to be travel-related. Follow the user's instructions carefully. Respond using markdown format, bold important point, response content needs to be travel-related.`
+        content: `You are ZISU helper, Follow the user's instructions carefully. Respond using markdown format, bold important point, response content needs to be travel-related. Follow the user's instructions carefully. Respond using markdown format, bold important point, response content needs to be travel-related.`
       },
       {
         role: "user",
-        content: `These are our conversation histries:${slice}.`
+        content: `These are our conversation histories:${slice}.`
       },
       {
         role: "user",
-        content: `This is what i want know now: ${userInput.value}.`
+        content: `This is what i want know now: ${userInput.value}.`,
       }
     ],
   })

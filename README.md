@@ -1,14 +1,6 @@
 # LLM-Front
 
-项目前端基于Vue3自建脚手架构建
-
-- 实现基本的用户登录与注册，Token验证
-- 支持completion流式对话响应
-- 支持管理员“采集-微调-导出-部署”全自动执行
-- 支持用户端config配置
-- 支持多Session隔离的对话记录缓存，支持历史记录数据
-
-
+基于基础版本的emLLM-front构建RAG版本, 支持原有功能的基础上, 支持基于emRag的前端支持
 
 ## 项目启动
 
@@ -16,14 +8,17 @@
 git clone https://github.com/emVisible/emLLM-front.git
 ```
 
+'''
+切换分支到rag分支
+'''
+
 ```
 进入项目根文件夹，安装依赖
 > yarn
 ```
 
 ```
-创建.env文件
-> cp .env.example ./.env
+设置env
 ```
 
 ```

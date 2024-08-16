@@ -42,28 +42,58 @@ export async function getStream(data: LLMRequestType) {
   });
   const reader = res.body!.getReader();
   let signal = false;
+  let prevExceptChunk = ""
   while (!signal) {
     const { value } = await reader.read()
     const chunk = value ? new TextDecoder().decode(value) : ''
     if (chunk) {
-      chunk.split("\n").forEach(ck => {
-        if (ck !== '') {
-          const postProcessData: StreamDataType = JSON.parse(ck)
-          if (postProcessData.choices[0].finish_reason !== null) signal = true
-          try {
-            const item = {
-              id: v4(),
-              date: new Date().toUTCString(),
-              role: 'machine',
-              content: postProcessData.choices[0].delta.content
+      console.log(chunk)
+      try {
+        chunk.split("\n").forEach(ck => {
+          if (ck !== '') {
+            // 后处理
+            const postProcessData: StreamDataType = JSON.parse(chunk)
+            if (postProcessData.choices[0].finish_reason !== null) signal = true
+            try {
+              const item = {
+                id: v4(),
+                date: new Date().toUTCString(),
+                role: 'machine',
+                content: postProcessData.choices[0].delta.content
+              }
+              sessionStore().pushItemToCurrentSession(item)
+            } catch (e) {
+              console.error(e)
+              return
             }
-            sessionStore().pushItemToCurrentSession(item)
-          } catch (e) {
-            console.error(e)
-            return
           }
-        }
-      })
+        })
+      } catch (e) {
+        // if (chunk !== prevExceptChunk) {
+        //   prevExceptChunk += chunk
+        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
+        console.log(chunk)
+        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
+        // }
+        // prevExceptChunk = chunk
+        // try {
+        //   const postProcessData: StreamDataType = JSON.parse(chunk)
+        //   if (postProcessData.choices[0].finish_reason !== null) signal = true
+        //   try {
+        //     const item = {
+        //       id: v4(),
+        //       date: new Date().toUTCString(),
+        //       role: 'machine',
+        //       content: postProcessData.choices[0].delta.content
+        //     }
+        //     sessionStore().pushItemToCurrentSession(item)
+        //   } catch (e) {
+        //     console.error(e)
+        //     return
+        //   }
+        // } catch (e) {
+        // }
+      }
     }
   }
 }

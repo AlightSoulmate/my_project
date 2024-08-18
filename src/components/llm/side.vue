@@ -55,6 +55,9 @@ const createSession = async () => {
   sessionStore().createSession([]);
 };
 await getCurrentUser().then((r: User | undefined) => {
+  console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
+  console.log(r)
+  console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
   name.value = r!.name;
   email.value = r!.email;
 });

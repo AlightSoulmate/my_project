@@ -21,6 +21,9 @@ import messageFrame from "./messageFrame.vue";
 const name = ref("");
 const email = ref("");
 getCurrentUser().then((r: any) => {
+  console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
+  console.log(r)
+  console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
   name.value = r.name;
   email.value = r.email;
 });

@@ -3,6 +3,7 @@ import { CacheEnum } from "../enum/cacheEnum"
 import util from "../utils"
 import userStore from "@/store/userStore"
 import utils from "../utils"
+import menuStore from "@/store/menuStore"
 
 class Guard {
   constructor(private router: Router) { }
@@ -31,10 +32,10 @@ class Guard {
     // if (this.isLogin(to) == false) return {name:'login'}
     // if (this.isGuest(to) == false ) return from
     // await this.getUserInfo()
-    //记录历史路由
-    // menuStore().addHistoryMenu(to)
+    // 记录历史路由
+    menuStore().addHistoryMenu(to)
     if (to.meta.auth && !this.token()) return {name:'login'}
-    if (to.meta.guest && this.token()) return from
+    if (to.meta.guest && this.token()) return to
   }
 }
 export default (router: Router) => {

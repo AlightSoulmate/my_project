@@ -8,6 +8,12 @@ const routes = [
     meta: { auth: true }
   },
   {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/home.vue'),
+    meta: { guest: true },
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/views/auth/login.vue'),
@@ -23,7 +29,7 @@ const routes = [
   {
     path: '/:any(.*)',
     name: 'notFound',
-    component: () => import('@/views/errors/404.vue'),
+    component: () => import('@/views/errors copy/404.vue'),
     meta: { guest: true },
   },
 ] as RouteRecordRaw[]

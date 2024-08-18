@@ -18,8 +18,9 @@ import { getCurrentUser } from "@/apis/userApi";
 import sessionStore, { HistoryType } from "@/store/sessionStore";
 import { md } from "@/utils/md";
 import messageFrame from "./messageFrame.vue";
-const name = ref("");
-const email = ref("");
+const name = ref("test");
+const email = ref("test@qq.com");
+
 // getCurrentUser().then((r: any) => {
 //   console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
 //   console.log(r)

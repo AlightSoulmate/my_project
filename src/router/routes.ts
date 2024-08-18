@@ -2,10 +2,16 @@ import { RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    name: 'llm',
-    component: () => import('@/views/llm/dev.vue'),
-    meta: { auth: true }
+    name: 'chat',
+    path: '/chat',
+    component: () => import('@/views/llm/chat.vue'),
+    meta: { guest: true, menu: { title: 'LLM对话' } },
+  },
+  {
+    name: 'rag',
+    path: '/rag',
+    component: () => import('@/views/llm/rag.vue'),
+    meta: { guest: true, menu: { title: 'RAG对话' } },
   },
   {
     path: '/home',
@@ -26,11 +32,5 @@ const routes = [
     meta: { guest: true },
   },
 
-  {
-    path: '/:any(.*)',
-    name: 'notFound',
-    component: () => import('@/views/errors copy/404.vue'),
-    meta: { guest: true },
-  },
 ] as RouteRecordRaw[]
 export default routes

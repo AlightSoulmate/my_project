@@ -9,6 +9,7 @@ interface Message {
 }
 export interface LLMRequestType {
   prompt: string
+  mode: "llm" | "rag"
   system_prompt?: string
   chat_history?: Message[]
 }
@@ -31,7 +32,8 @@ export interface StreamDataType {
  * 获取对话, 以XINFERENCE接口流式渲染
 */
 export async function getStream(data: LLMRequestType) {
-  const res = await fetch(`/api/llm/chat`, {
+  const url = data.mode == "llm" ? "/api/llm/chat" : "/api/rag/chat"
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"

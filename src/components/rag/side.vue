@@ -1,14 +1,27 @@
 <template>
   <div class="h-full flex flex-col p-4 bg-orange-100 border-r-2">
-    <button class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6" @click="createSession">
+    <button
+      class="add flex justify-center py-3 duration-300 rounded-full hover:bg-white mb-6"
+      @click="createSession"
+    >
       <div class="flex items-center">
-        <Newlybuild class="duration-300 icon translate-x-10" theme="filled" size="32" fill="#2d3436" />
+        <Newlybuild
+          class="duration-300 icon translate-x-10"
+          theme="filled"
+          size="32"
+          fill="#2d3436"
+        />
         <div class="duration-300 ml-3 opacity-0">开启新对话</div>
       </div>
     </button>
-    <section class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg shadow-lg">
-      <historyButton v-for="(session, index) in sessions"
-        class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md shadow-sm my-1 py-4" @click="switchSession(index)">
+    <section
+      class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg shadow-lg"
+    >
+      <historyButton
+        v-for="(session, index) in sessions"
+        class="w-full pl-3 duration-300 hover:bg-zinc-200 rounded-md shadow-sm my-1 py-4"
+        @click="switchSession(index)"
+      >
         <template #title> 聊天记录{{ index + 1 }} </template>
         <template #time>
           {{ session[session.length - 1]?.date }}
@@ -17,12 +30,18 @@
           {{ session.length + "条信息" }}
         </template>
         <template #delete>
-          <delete-three @click="sessionStore().deleteSessionCurrent(index)" theme="outline" size="18" fill="#FA5C5C" />
+          <delete-three
+            @click="sessionStore().deleteSessionCurrent(index)"
+            theme="outline"
+            size="18"
+            fill="#FA5C5C"
+          />
         </template>
       </historyButton>
     </section>
     <section
-      class="flex my-3 items-center py-2 px-3 bg-white rounded-full duration-300 cursor-pointer hover:bg-zinc-200">
+      class="flex my-3 items-center py-2 px-3 bg-white rounded-full duration-300 cursor-pointer hover:bg-zinc-200"
+    >
       <el-dropdown class="w-full">
         <span class="el-dropdown-link w-full flex items-center">
           <el-avatar :size="40" src="/images/user.png" />
@@ -47,10 +66,11 @@ import { logout } from "@/utils/user";
 import { Newlybuild } from "@icon-park/vue-next";
 import { v4 } from "uuid";
 import historyButton from "./historyButton.vue";
-import {DeleteThree} from '@icon-park/vue-next'
+import { DeleteThree } from "@icon-park/vue-next";
+import Drawer from "./drawer.vue";
 const sessions = ref(await sessionStore().getSessions());
-const name = ref("");
-const email = ref("");
+const name = ref("test");
+const email = ref("test@qq.com");
 const createSession = async () => {
   sessionStore().createSession([]);
 };
@@ -61,8 +81,6 @@ const createSession = async () => {
 //   name.value = r!.name;
 //   email.value = r!.email;
 // });
-
-
 
 const switchSession = async (index: number) => {
   const session = sessionStore();
@@ -84,7 +102,7 @@ const switchSession = async (index: number) => {
   }
 }
 
-.el-button+.el-button {
+.el-button + .el-button {
   margin-left: 0px;
 }
 

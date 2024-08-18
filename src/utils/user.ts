@@ -11,7 +11,7 @@ export async function login(values: UserLoginType | URLSearchParams) {
   if ((access_token !== null) || (access_token !== undefined)) {
     store.set(CacheEnum.TOKEN_NAME, access_token)
     if (!store.get(CacheEnum.REDIRECT_ROUTE_NAME)) {
-      store.set(CacheEnum.REDIRECT_ROUTE_NAME, "llm")
+      store.set(CacheEnum.REDIRECT_ROUTE_NAME, "rag")
     }
     const routeName = store.get(CacheEnum.REDIRECT_ROUTE_NAME) ?? 'home'
     userStore().getUserInfo()

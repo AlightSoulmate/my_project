@@ -2,7 +2,7 @@
   <div class="admin-menu" :class="{close:menuService.close.value}">
     <div class="menu bg-gray-800">
     <div class="logo">
-      <span>ZISU QA</span>
+      <span class="w-full flex justify-center text-center">ZISU QA Assistant</span>
     </div>
     <!-- 菜单 -->
     <div class="container">

@@ -32,7 +32,7 @@
       <div class="group relative">
         <div class="flex justify-center items-center">
           <img
-            src="/public/user.png"
+            src="/public/images/user.png"
             alt=""
             class="h-8 w-8 rounded-full object-cover"
           />

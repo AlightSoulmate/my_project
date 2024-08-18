@@ -13,6 +13,5 @@ export default
         component:()=>import('../../views/admin/home.vue'),
         meta:{menu:{title:'工作台'}},
     },
-
     ]
   } as RouteRecordRaw

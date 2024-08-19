@@ -40,7 +40,6 @@ export async function getCurrentUser(): Promise<User | undefined> {
     if (r) {
       if (r?.detail) {
         logout()
-        window.location.reload()
       } else {
         return r
       }

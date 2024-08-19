@@ -2,12 +2,6 @@ import { RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
-    name: 'chat',
-    path: '/chat',
-    component: () => import('@/views/llm/chat.vue'),
-    meta: { guest: true, menu: { title: 'LLM对话' } },
-  },
-  {
     name: 'rag',
     path: '/rag',
     component: () => import('@/views/llm/rag.vue'),

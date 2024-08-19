@@ -10,3 +10,10 @@ export function uploadImage(data:FormData) {
     data
   })
 }
+export function uploadFile(data:FormData) {
+  return http.request({
+    url: `/rag/upload_single`,
+    method:'post',
+    data
+  })
+}

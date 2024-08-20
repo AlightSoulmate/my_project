@@ -1,4 +1,4 @@
-import { uploadImage } from '../../apis/uploadApi'
+import { uploadImage } from '../../apis/upload'
 import Editor from '@toast-ui/editor'
 export default class {
   isFullscreen: boolean = false

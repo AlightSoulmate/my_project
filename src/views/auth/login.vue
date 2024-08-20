@@ -49,11 +49,7 @@ const { handleSubmit, values, errors, validate } = useForm({
 
 useFields(Object.keys(schema));
 const onSubmit = handleSubmit(async (values: any) => {
-  const { account, password } = values;
-  const formData = new URLSearchParams();
-  formData.append("username", account);
-  formData.append("password", password);
-  login(formData).then((r) => {
+  login(values).then((r) => {
     console.log("r", r);
   });
 });

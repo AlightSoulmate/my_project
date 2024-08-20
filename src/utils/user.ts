@@ -1,4 +1,4 @@
-import userApi, { AuthReturnType, UserLoginType } from '../apis/userApi';
+import userApi, { AuthReturnType, UserLoginType } from '../apis/user';
 import { CacheEnum } from './../enum/cacheEnum';
 import store from "./store";
 import router from '@/router'
@@ -6,8 +6,10 @@ import userStore from '../store/userStore';
 import sessionStore from '@/store/sessionStore';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-export async function login(values: UserLoginType | URLSearchParams) {
-  const { access_token } = await userApi.login(values) as any
+export async function login(values: UserLoginType) {
+  debugger
+  const { access_token } = await userApi.login(values)
+  console.log('access_token',access_token)
   if ((access_token !== null) || (access_token !== undefined)) {
     store.set(CacheEnum.TOKEN_NAME, access_token)
     if (!store.get(CacheEnum.REDIRECT_ROUTE_NAME)) {
@@ -15,7 +17,6 @@ export async function login(values: UserLoginType | URLSearchParams) {
     }
     const routeName = store.get(CacheEnum.REDIRECT_ROUTE_NAME) ?? 'home'
     userStore().getUserInfo()
-    console.log('routeName', routeName)
     router.push({ name: routeName })
   }
 }

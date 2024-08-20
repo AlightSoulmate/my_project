@@ -2,8 +2,8 @@ import { RouteRecordRaw } from 'vue-router'
 
 const routes = [
   {
+    path: '/',
     name: 'rag',
-    path: '/rag',
     component: () => import('@/views/llm/rag.vue'),
     meta: { guest: true, menu: { title: 'RAG对话' } },
   },

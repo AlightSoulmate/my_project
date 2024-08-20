@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { getStream } from '@/apis/llmApi'
+import { getStream } from '@/apis/llm'
 import llmStore from '@/store/llmStore'
 import sessionStore from '@/store/sessionStore'
 import { v4 } from 'uuid'
@@ -98,8 +98,12 @@ const dispatch = async () => {
   })
   const start = histories.length - 10 >= 0 ? histories.length - 10 : 0
   const slice = histories.slice(start, histories.length - 1)
-  getStream({
-    mode: chatMode.value ? "rag" : "llm",
+  handleStream(slice)
+}
+
+const handleStream = async (slice: string[]) => {
+  const res = await getStream({
+    mode: chatMode.value ? 'rag' : 'llm',
     prompt: userInput.value,
     system_prompt: '',
     chat_history: [
@@ -113,6 +117,41 @@ const dispatch = async () => {
       },
     ],
   })
+  if (res.body) {
+    const reader = res.body.getReader()
+    const decoder = new TextDecoder('utf-8')
+
+    // 逐块读取数据
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      let chunk
+      try {
+        chunk = decoder.decode(value, { stream: true })
+        JSON.parse(chunk)
+        console.log(chunk)
+      } catch (e) {
+        chunk = decoder.decode(value).split('\n')
+        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
+        console.log(chunk)
+        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
+      } finally {
+        // console.log(value)
+        // const postProcessData = JSON.parse(chunk)
+        // console.log(postProcessData)
+        // const item = {
+        //   id: v4(),
+        //   date: new Date().toUTCString(),
+        //   role: 'machine',
+        //   content: postProcessData.choices[0].delta.content,
+        // }
+        // console.log(item)
+        // sessionStore().pushItemToCurrentSession(item)
+      }
+    }
+  } else {
+    throw new Error('Stream not available')
+  }
 }
 </script>
 

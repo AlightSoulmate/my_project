@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { getStream } from '@/apis/llm'
+import { ElNotification } from 'element-plus'
 import llmStore from '@/store/llmStore'
 import sessionStore from '@/store/sessionStore'
 import { v4 } from 'uuid'
@@ -101,6 +102,18 @@ const dispatch = async () => {
   handleStream(slice)
 }
 
+// 放入本地缓存 && 流式结果
+const parseChunk = (chunk: string) => {
+  const postProcessData = JSON.parse(chunk)
+  const item = {
+    id: v4(),
+    date: new Date().toUTCString(),
+    role: 'machine',
+    content: postProcessData,
+  }
+  sessionStore().pushItemToCurrentSession(item)
+}
+
 const handleStream = async (slice: string[]) => {
   const res = await getStream({
     mode: chatMode.value ? 'rag' : 'llm',
@@ -109,48 +122,35 @@ const handleStream = async (slice: string[]) => {
     chat_history: [
       {
         role: 'user',
-        content: `These are our conversation histories:${slice}.`,
+        content: `这些是我想要知道的信息: ${userInput.value}.`,
       },
       {
         role: 'user',
-        content: `This is what i want know now: ${userInput.value}.`,
+        content: `这些是可参考的信息: ${slice}.`,
       },
     ],
   })
   if (res.body) {
     const reader = res.body.getReader()
     const decoder = new TextDecoder('utf-8')
-
-    // 逐块读取数据
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
       let chunk
       try {
-        chunk = decoder.decode(value, { stream: true })
-        JSON.parse(chunk)
-        console.log(chunk)
+        chunk = decoder.decode(value)
+        parseChunk(chunk)
       } catch (e) {
-        chunk = decoder.decode(value).split('\n')
-        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
-        console.log(chunk)
-        console.log('🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸🔸')
-      } finally {
-        // console.log(value)
-        // const postProcessData = JSON.parse(chunk)
-        // console.log(postProcessData)
-        // const item = {
-        //   id: v4(),
-        //   date: new Date().toUTCString(),
-        //   role: 'machine',
-        //   content: postProcessData.choices[0].delta.content,
-        // }
-        // console.log(item)
-        // sessionStore().pushItemToCurrentSession(item)
+        chunk = decoder.decode(value)
+        const chunks = chunk.split('\n')
+        chunks.forEach((ck) => ck && parseChunk(ck))
       }
     }
-  } else {
-    throw new Error('Stream not available')
+    ElNotification({
+      title: '回答完毕',
+      position: 'bottom-right',
+      showClose: false,
+    })
   }
 }
 </script>

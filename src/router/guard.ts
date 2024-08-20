@@ -10,16 +10,16 @@ class Guard {
   public run() {
     this.router.beforeEach(this.beforeEach.bind(this))
   }
-  private token(): string | null{
+  private token(): string | null {
     return util.store.get(CacheEnum.TOKEN_NAME)
   }
-  private getUserInfo(){
+  private getUserInfo() {
     if (this.token()) return userStore().getUserInfo()
   }
   private isLogin(route: RouteLocationNormalized): boolean {
-    const state =  Boolean(!route.meta.auth || (route.meta.auth && this.token()))
-    if (state === false){
-      utils.store.set(CacheEnum.REDIRECT_ROUTE_NAME,route.name)
+    const state = Boolean(!route.meta.auth || (route.meta.auth && this.token()))
+    if (state === false) {
+      utils.store.set(CacheEnum.REDIRECT_ROUTE_NAME, route.name)
     }
     return state
 
@@ -28,14 +28,13 @@ class Guard {
     return Boolean(!route.meta.guest || (route.meta.guest && !this.token()))
   }
 
-  private async beforeEach(to:RouteLocationNormalized,from:RouteLocationNormalized) {
-    // if (this.isLogin(to) == false) return {name:'login'}
-    // if (this.isGuest(to) == false ) return from
-    // await this.getUserInfo()
-    // 记录历史路由
+  private async beforeEach(to: RouteLocationNormalized, from: RouteLocationNormalized) {
+    if (this.isLogin(to) == false) return { name: 'login' }
+    if (to.meta.auth && !this.token()) return { name: 'login' }
+    await this.getUserInfo()
     menuStore().addHistoryMenu(to)
-    // if (to.meta.auth && !this.token()) return {name:'login'}
-    // if (to.meta.guest && this.token()) return to
+    if (this.isGuest(to) == false) return from
+    if (to.meta.guest && this.token()) return from
   }
 }
 export default (router: Router) => {

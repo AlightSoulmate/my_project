@@ -34,13 +34,12 @@
 
 <script setup lang="ts">
 import { getStream } from '@/apis/llm'
-import { ElNotification } from 'element-plus'
-import llmStore from '@/store/llmStore'
 import sessionStore from '@/store/sessionStore'
+import { ElNotification } from 'element-plus'
 import { v4 } from 'uuid'
 import { onMounted, ref } from 'vue'
-import messageVue from './message.vue'
 import Drawer from './drawer.vue'
+import messageVue from './message.vue'
 const userInput = ref('')
 const isEmpty = ref(await sessionStore().isSessionEmpty())
 // false: 基础LLM模式; true: RAG模式
@@ -87,7 +86,6 @@ const handleSubmit = async (e: KeyboardEvent) => {
 }
 
 const dispatch = async () => {
-  const config = (await llmStore().getConfig()) as any
   const de = await sessionStore().getCurrentSession(await sessionStore().getSessionIndex())
   const histories: string[] = []
   de?.forEach((item) => {

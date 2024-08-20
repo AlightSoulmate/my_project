@@ -6,5 +6,10 @@ declare module 'vue-router' {
     enterClass?: string
     leaveClass?: string
     permission?: string
+    menu?: {
+      title?: string
+      icon?: any
+      show?: boolean
+    }
   }
 }

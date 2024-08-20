@@ -1,17 +1,15 @@
-// export default class
-export interface User {
-  url: string
-}
-// export function uploadImage(data: FormData) {
-//   return http.request<User>({
-//     url: `upload/image`,
-//     method: 'post',
-//     data
-//   })
-// }
+import { apiEnum } from "@/enum/apiEnum"
 
 export function uploadFile(data: FormData) {
-  return fetch(`/rag/upload_single`, {
+  return fetch(apiEnum.UPLOAD_DOCUMENT, {
+    method: "POST"
+  })
+}
+/**
+ * @TODO 未来多模态预留接口
+*/
+export function uploadImage(data: FormData) {
+  return fetch(apiEnum.UPLOAD_IMAGE_URL, {
     method: "POST"
   })
 }

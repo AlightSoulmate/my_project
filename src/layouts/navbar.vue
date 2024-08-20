@@ -67,8 +67,8 @@
 import userStore from '@/store/userStore'
 import utils from '@/utils'
 import menuService from '@/composables/menu'
-import Notification from '@/components/notification.vue'
-import Breadcrumb from '@/components/breadcrumb.vue'
+import Breadcrumb from '@/components/admin/breadcrumb.vue'
+import Notification from '@/components/admin/notification.vue'
 const user = userStore()
 const isFullscreen = ref<boolean>(false)
 const fullScreen = () => {

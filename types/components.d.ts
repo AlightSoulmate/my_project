@@ -7,6 +7,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AdminAnimateList: typeof import('./../src/components/admin/animateList.vue')['default']
+    AdminBreadcrumb: typeof import('./../src/components/admin/breadcrumb.vue')['default']
+    AdminNotification: typeof import('./../src/components/admin/notification.vue')['default']
     AnimateList: typeof import('./../src/components/animateList.vue')['default']
     Breadcrumb: typeof import('./../src/components/breadcrumb.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']

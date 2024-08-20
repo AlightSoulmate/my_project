@@ -1,4 +1,3 @@
-import userApi, { User } from '../apis/user'
 import { defineStore } from 'pinia'
 import store from '@/utils/store'
 import { CacheEnum } from '@/enum/cacheEnum'

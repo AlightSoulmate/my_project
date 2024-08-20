@@ -1,17 +1,17 @@
-import userApi, { AuthReturnType, UserLoginType } from '../apis/user';
-import { CacheEnum } from './../enum/cacheEnum';
-import store from "./store";
-import router from '@/router'
-import userStore from '../store/userStore';
+import { login, UserLoginType } from '@/apis/user';
+import router from '@/router';
 import sessionStore from '@/store/sessionStore';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import userStore from '../store/userStore';
+import { CacheEnum } from './../enum/cacheEnum';
+import store from "./store";
 
-export async function login(values: UserLoginType) {
-  debugger
-  const { access_token } = await userApi.login(values)
-  console.log('access_token',access_token)
+export async function loginWrap(values: UserLoginType) {
+  // token验证
+  const { access_token } = await login(values)
   if ((access_token !== null) || (access_token !== undefined)) {
     store.set(CacheEnum.TOKEN_NAME, access_token)
+    // 重定向
     if (!store.get(CacheEnum.REDIRECT_ROUTE_NAME)) {
       store.set(CacheEnum.REDIRECT_ROUTE_NAME, "rag")
     }
@@ -37,10 +37,9 @@ export function logout() {
       })
       setTimeout(() => {
         store.remove(CacheEnum.TOKEN_NAME)
-        router.push('/login')
         sessionStore().clearAllSession()
-        location.reload()
         userStore().info = null
+        router.push('/login')
       }, 3000)
     })
 

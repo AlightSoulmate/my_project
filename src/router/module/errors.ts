@@ -2,9 +2,8 @@ import { RouteRecordRaw } from 'vue-router';
 export default {
   name: 'error',
   path: '/error',
-  component: () => import('@/layouts/admin.vue'),
-
-  meta: { auth: true, menu: { title: '错误页面', icon: 'Caution', show: true, } },
+  // meta: { auth: true, menu: { show: true, title: "错误", icon:"" } },
+  meta: { guest: true },
   children: [
     {
       name: 'error.404',

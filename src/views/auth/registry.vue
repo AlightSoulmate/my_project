@@ -15,8 +15,12 @@
           </div>
           <YButton class="w-full">注册</YButton>
           <div class="flex justify-center mt-3">
-            <icon-wechat theme="outline" size="24" fill="#fff"
-              class="bg-green-600 text-white rounded-full p-1 cursor-pointer" aria-hidden="true" />
+            <icon-wechat
+              theme="outline"
+              size="24"
+              fill="#fff"
+              class="bg-green-600 text-white rounded-full p-1 cursor-pointer"
+              aria-hidden="true" />
           </div>
         </div>
         <div class="flex gap-3 justify-center mt-10">
@@ -29,44 +33,44 @@
 </template>
 
 <script setup lang="ts">
-import Error from "@/components/y/error.vue";
-import v from "../../plugins/validate";
-import { login } from "../../utils/user";
-import { registry } from "@/apis/userApi";
-import { ElNotification } from "element-plus";
-import router from "@/router";
-const { useForm, useFields, yup } = v;
+import Error from '@/components/y/error.vue'
+import v from '../../plugins/validate'
+import { loginWrap } from '../../utils/user'
+import { ElNotification } from 'element-plus'
+import router from '@/router'
+import { registry } from '@/apis/user'
+const { useForm, useFields, yup } = v
 
 const schema = yup.object({
   account: yup
     .string()
     .required()
-    .matches(/^\d{11}|.+@.+$/, "请输入邮箱")
-    .label("邮箱"),
-  password: yup.string().required().min(4, "密码不少于4位").label("密码"),
-});
+    .matches(/^\d{11}|.+@.+$/, '请输入邮箱')
+    .label('邮箱'),
+  password: yup.string().required().min(4, '密码不少于4位').label('密码'),
+})
 const { handleSubmit, values, errors, validate } = useForm({
   validationSchema: schema,
-});
+})
 
-useFields(Object.keys(schema));
+useFields(Object.keys(schema))
 const onSubmit = handleSubmit(async (values: any) => {
-  const { account, password } = values;
+  const { account, password } = values
   registry({
     name: account,
     email: account,
     password: password,
   })
     .then((r) => {
-      console.log("r", r);
+      console.log('r', r)
     })
     .then(() => {
-      ElNotification({ title: "注册成功" });
+      ElNotification({ title: '注册成功' })
       setTimeout(() => {
-        router.push({ name: "login" });
-      }, 1000);
-    });
-});
+        router.push({ name: 'login' })
+      }, 1000)
+    })
+})
 </script>
 
 <style lang="scss">

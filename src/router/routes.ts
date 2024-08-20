@@ -5,13 +5,7 @@ const routes = [
     path: '/',
     name: 'rag',
     component: () => import('@/views/llm/rag.vue'),
-    meta: { guest: true, menu: { title: 'RAG对话' } },
-  },
-  {
-    path: '/home',
-    name: 'home',
-    component: () => import('@/views/home.vue'),
-    meta: { guest: true },
+    meta: { auth: true },
   },
   {
     path: '/login',

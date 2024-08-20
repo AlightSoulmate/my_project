@@ -68,8 +68,7 @@ export default class {
       async (blob: any, callback: Function) => {
         const form = new FormData()
         form.append('file', blob, blob.name)
-        const response = await uploadImage(form)
-
+        const response: any = await uploadImage(form)
         callback(response.result.url, blob.name)
       },
     )

@@ -60,14 +60,10 @@
 </template>
 
 <script setup lang="ts">
-import { User, getCurrentUser } from "@/apis/userApi";
 import sessionStore from "@/store/sessionStore";
 import { logout } from "@/utils/user";
-import { Newlybuild } from "@icon-park/vue-next";
-import { v4 } from "uuid";
+import { DeleteThree, Newlybuild } from "@icon-park/vue-next";
 import historyButton from "./historyButton.vue";
-import { DeleteThree } from "@icon-park/vue-next";
-import Drawer from "./drawer.vue";
 const sessions = ref(await sessionStore().getSessions());
 const name = ref("test");
 const email = ref("test@qq.com");

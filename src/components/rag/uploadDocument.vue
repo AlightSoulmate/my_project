@@ -11,8 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { uploadFile } from '@/apis/uploadApi'
-import { Config, UploadLogs } from '@icon-park/vue-next'
+import { UploadLogs } from '@icon-park/vue-next'
 const selectedFile = ref<File | null>(null)
 const supportFormat = ".doc .docx .pdf .xls .xlsx .txt .ppt .pptx .csv .epub .html .md .odt .enex .eml"
 

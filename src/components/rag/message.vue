@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentUser } from "@/apis/userApi";
 import sessionStore, { HistoryType } from "@/store/sessionStore";
 import { md } from "@/utils/md";
 import messageFrame from "./messageFrame.vue";

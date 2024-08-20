@@ -15,7 +15,7 @@ export default {
       name: 'admin.data',
       path: 'data',
       component: () => import('@/views/admin/data.vue'),
-      meta: { menu: { title: '数据概览' } }
+      meta: { menu: { title: '数据概览(demo)' } }
     }
   ]
 } as RouteRecordRaw

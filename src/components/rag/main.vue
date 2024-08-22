@@ -95,7 +95,7 @@ const dispatch = async () => {
       if (item.content !== '...') histories.push(item.content)
     }
   })
-  const start = histories.length - 10 >= 0 ? histories.length - 10 : 0
+  const start = histories.length - 3 >= 0 ? histories.length - 3 : 0
   const slice = histories.slice(start, histories.length - 1)
   handleStream(slice)
 }

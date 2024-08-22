@@ -12,6 +12,6 @@ const props = defineProps({
 
 <style scoped>
 .y_input {
-  @apply border border-gray-200 placeholder:text-xs w-full rounded py-1 px-2 outline-none focus:ring-2 ring-offset-2 ring-purple-600 duration-300 focus:border-white;
+  @apply border border-gray-200 pl-3 placeholder:text-xs w-full rounded py-1 px-2 outline-none focus:ring-2 ring-offset-2 ring-purple-600 duration-300 focus:border-white;
 }
 </style>

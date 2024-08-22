@@ -1,24 +1,16 @@
 <template>
-  <form class="w-full h-screen bg-[url('/images/background.jpg')]" @submit="onSubmit">
-    <div class="flex bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
-      <div class="p-6 flex flex-col justify-between">
+  <form class="bg-gradient-to-r from-[#fab1a0] to-[#778beb] w-full h-screen p-0" @submit="onSubmit">
+    <div class="w-3/5 h-4/5 bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
+      <div class="p-6 flex flex-col justify-between overflow-hidden">
         <div>
-          <h2 class="text-center text-gray-700 text-lg">用户登陆</h2>
-          <div class="mt-8">
+          <h2 class="mt-16 text-center text-gray-700 text-2xl font-bold">用户登陆</h2>
+          <div class="mt-16">
             <yInput v-model="values.account" @input="validate"></yInput>
             <Error :error="errors.account"></Error>
             <yInput v-model="values.password" class="mt-5" @input="validate" :isPassword="true"></yInput>
             <Error :error="errors.password"></Error>
           </div>
           <YButton class="w-full">登录</YButton>
-          <div class="flex justify-center mt-3">
-            <icon-wechat
-              theme="outline"
-              size="24"
-              fill="#fff"
-              class="bg-green-600 text-white rounded-full p-1 cursor-pointer"
-              aria-hidden="true" />
-          </div>
         </div>
         <div class="flex gap-3 justify-center mt-10">
           <y-link title="忘记密码" path="/404"></y-link>

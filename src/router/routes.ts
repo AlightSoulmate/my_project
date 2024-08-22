@@ -10,14 +10,28 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/auth/login.vue'),
+    component: () => import('@/layouts/auth.vue'),
     meta: { guest: true },
+    children: [
+      {
+        name: '',
+        path: '',
+        component: () => import('@/views/auth/login.vue'),
+      }
+    ]
   },
   {
     path: '/registry',
     name: 'registry',
-    component: () => import('@/views/auth/registry.vue'),
+    component: () => import('@/layouts/auth.vue'),
     meta: { guest: true },
+    children: [
+      {
+        name: '',
+        path: '',
+        component: () => import('@/views/auth/registry.vue'),
+      }
+    ]
   },
 
 ] as RouteRecordRaw[]

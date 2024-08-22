@@ -1,6 +1,6 @@
 <template>
-  <form class="w-full h-screen" @submit="onSubmit">
-    <div class="w-[720px] h-[500px] bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
+  <form class="w-full h-screen bg-[url('/images/background.jpg')]" @submit="onSubmit">
+    <div class="flex bg-white md:grid grid-cols-2 rounded-md shadow-sm translate-y-32 md:translate-y-0">
       <div class="p-6 flex flex-col justify-between">
         <div>
           <h2 class="text-center text-gray-700 text-lg">用户登陆</h2>

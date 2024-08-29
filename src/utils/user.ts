@@ -42,7 +42,14 @@ export function logout() {
         router.push('/login')
       }, 3000)
     })
-
+}
+export function logout_force() {
+  setTimeout(() => {
+    store.remove(CacheEnum.TOKEN_NAME)
+    sessionStore().clearAllSession()
+    userStore().info = null
+    router.push('/login')
+  }, 3000)
 }
 export function isLogin() {
   return Boolean(store.get(CacheEnum.TOKEN_NAME))

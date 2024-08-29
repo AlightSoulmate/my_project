@@ -1,7 +1,11 @@
 import highlight from "highlight.js";
-import 'highlight.js/styles/github.css';
 import Markdown from "markdown-it";
-
+import 'highlight.js/styles/atom-one-dark.css'
+function removeSpaces(strings: TemplateStringsArray, ...values: any[]) {
+  return strings
+    .map((str, i) => `${str.replace(/\s+/g, ' ').trim()}${values[i] || ''}`)
+    .join('');
+}
 const mdOptions = {
   html: true,        // 在源码中启用 HTML 标签
   linkify: true,     // 将类似 URL 的文本自动转换为链接。
@@ -12,13 +16,13 @@ const mdOptions = {
   highlight(str: any, lang: any) {
     if (lang && highlight.getLanguage(lang)) {
       try {
-        return (
+        return removeSpaces`
+            <pre class="w-full p-4 my-2 break-words break-all bg-[#4b4b4b] rounded-lg">
+              <code class="hljs" style="background:#4b4b4b;">
+                ${highlight.highlight(str, { language: lang, ignoreIllegals: true }).value}
+              </code>
+            </pre>
           `
-            <code class="w-full px-4 my-2 break-words break-all">
-              ${highlight.highlight(lang, str, true).value}
-            </code>
-          `
-        );
       } catch (__) { }
     }
     return "";

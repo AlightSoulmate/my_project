@@ -2,7 +2,7 @@
   <el-container class="h-full w-full">
     <el-main class="main flex" id="main-window">
       <article v-if="!isEmpty" class="flex-1">
-        <messageVue></messageVue>
+        <Message />
       </article>
       <article v-else class="flex-1 h-full flex flex-col justify-center items-center">
         <el-image src="/images/empty.png" fit="contain" :lazy="true" class="py-12 scale-150"></el-image>
@@ -11,7 +11,7 @@
     </el-main>
     <el-footer class="relative flex flex-col justify-center items-center mt-3">
       <section class="flex-1 flex justify-center items-center mt-4">
-        <Drawer></Drawer>
+        <Drawer />
         <input
           class="w-[650px] h-[50px] outline-none px-6 rounded-lg duration-300 hover:shadow-md focus:shadow-md"
           type="text"
@@ -39,7 +39,7 @@ import { ElNotification } from 'element-plus'
 import { v4 } from 'uuid'
 import { onMounted, ref } from 'vue'
 import Drawer from './drawer.vue'
-import messageVue from './message.vue'
+import Message from './message.vue'
 const userInput = ref('')
 const isEmpty = ref(await sessionStore().isSessionEmpty())
 // false: 基础LLM模式; true: RAG模式
@@ -68,11 +68,11 @@ const handleSubmit = async (e: KeyboardEvent) => {
           content: ipt.value,
         }),
         role: 'user',
-        date: new Date().toUTCString(),
+        date: new Date().toLocaleString(),
       })
       .then(async () => {
         await sessionStore().updateCurrentSession({
-          date: new Date().toUTCString(),
+          date: new Date().toLocaleString(),
           id: v4(),
           role: 'machine',
           content: '...',
@@ -105,7 +105,7 @@ const parseChunk = (chunk: string) => {
   const postProcessData = JSON.parse(chunk)
   const item = {
     id: v4(),
-    date: new Date().toUTCString(),
+    date: new Date().toLocaleString(),
     role: 'machine',
     content: postProcessData,
   }
@@ -154,6 +154,10 @@ const handleStream = async (slice: string[]) => {
 </script>
 
 <style scoped lang="scss">
+.main{
+  min-width: 640px;
+}
+
 .main::-webkit-scrollbar-track {
   background-color: #b8bfc259;
   border-radius: 10px;

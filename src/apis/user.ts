@@ -1,7 +1,8 @@
 import { apiEnum } from '@/enum/apiEnum'
 import { CacheEnum } from '@/enum/cacheEnum'
+import { useRouter } from 'vue-router'
 import store from '@/utils/store'
-import { logout } from '@/utils/user'
+import { logout, logout_force } from '@/utils/user'
 
 export interface UserType {
   id: number,
@@ -52,13 +53,8 @@ export async function getCurrentUser(): Promise<UserType | undefined> {
       "Content-Type": "application/json"
     },
   }).then((r: any) => {
-    if (r) {
-      if (r?.detail) {
-        logout()
-      } else {
-        return r
-      }
-    }
+    if (!r.ok) logout_force()
+    else return r
     return undefined
   })
   return result as UserType | undefined

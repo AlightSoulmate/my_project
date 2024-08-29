@@ -6,5 +6,6 @@ export enum apiEnum {
   LLM_CHAT = "/api/llm/chat",
   RAG_CHAT = "/api/rag/chat",
   UPLOAD_DOCUMENT = '/rag/upload_single',
-
+  TENANT_CREATE = "/api/vector_store/create",
+  TENANT_GET = "/api/vector_store/get"
 }

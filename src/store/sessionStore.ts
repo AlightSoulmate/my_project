@@ -45,9 +45,8 @@ export default defineStore('session', {
       if (store.get(CacheEnum.TOKEN_NAME)) {
         if (this.sessions.length === 0) {
           this.createSession([])
-        } else {
-          this.sessions[this.currentIndex].push(data)
         }
+        this.sessions[this.currentIndex].push(data)
       }
     },
     async pushItemToCurrentSession(data: any) {
@@ -56,7 +55,7 @@ export default defineStore('session', {
         const targetObj = targetSession[this.sessions[this.currentIndex].length - 1]
         if (targetObj.content === '...') targetObj.content = ""
         targetObj.id = data.id
-        targetObj.date = new Date().toUTCString()
+        targetObj.date = new Date().toLocaleString()
         targetObj.role = 'machine'
         targetObj.content += data.content
       }

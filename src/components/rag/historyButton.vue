@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import sessionStore from '@/store/sessionStore';
 </script>
 
 <style scoped></style>

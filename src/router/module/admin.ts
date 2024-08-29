@@ -16,6 +16,12 @@ export default {
       path: 'data',
       component: () => import('@/views/admin/data.vue'),
       meta: { menu: { title: '数据概览(demo)' } }
+    },
+    {
+      name: 'admin.tenant',
+      path: 'tenant',
+      component: () => import('@/views/manage/tenant.vue'),
+      meta: { menu: { title: '租户管理' } }
     }
   ]
 } as RouteRecordRaw

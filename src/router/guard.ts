@@ -29,12 +29,15 @@ class Guard {
   }
 
   private async beforeEach(to: RouteLocationNormalized, from: RouteLocationNormalized) {
+    // 需要登录但未登录, 重定向到登录
     if (this.isLogin(to) == false) return { name: 'login' }
+    //  如果需要验证, 但是没有token, 重定向到登录
     if (to.meta.auth && !this.token()) return { name: 'login' }
-    await this.getUserInfo()
-    menuStore().addHistoryMenu(to)
+    // 如果不允许游客访问, 返回到原来的页面
     if (this.isGuest(to) == false) return from
-    if (to.meta.guest && this.token()) return from
+    // 如果允许游客访问且已登录, 转到对应页面
+    if (to.meta.guest && this.token()) return to
+    menuStore().addHistoryMenu(to)
   }
 }
 export default (router: Router) => {

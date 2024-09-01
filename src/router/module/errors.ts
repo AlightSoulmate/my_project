@@ -9,19 +9,19 @@ export default {
       name: 'error.404',
       path: '404',
       component: () => import('@/views/errors/404.vue'),
-      meta: { menu: { title: '404页面' } },
+      meta: { menu: { title: '404页面' }, permission:"student" },
     },
     {
       name: 'error.403',
       path: '403',
       component: () => import('@/views/errors/403.vue'),
-      meta: { menu: { title: '403页面' } },
+      meta: { menu: { title: '403页面' } , permission:"student"},
     },
     {
       name: 'error.500',
       path: '500',
       component: () => import('@/views/errors/500.vue'),
-      meta: { menu: { title: '500页面' } },
+      meta: { menu: { title: '500页面' } ,permission:"student"},
     },
     {
       path: '/:any(.*)',

@@ -46,16 +46,15 @@ export function registry(data: UserRegistryType) {
   })
 }
 
-export async function getCurrentUser(): Promise<UserType | undefined> {
+export async function getCurrentUser(): Promise<UserType> {
   const result = await fetch(apiEnum.GET_CURRENT_USER, {
     headers: {
       'Authorization': `Bearer ${store.get(CacheEnum.TOKEN_NAME)}`,
       "Content-Type": "application/json"
     },
-  }).then((r: any) => {
+  }).then((r) => {
     if (!r.ok) logout_force()
-    else return r
-    return undefined
+    else return r.json()
   })
-  return result as UserType | undefined
+  return result
 }

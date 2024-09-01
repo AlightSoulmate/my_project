@@ -6,11 +6,11 @@
         <div class="duration-300 ml-3 opacity-0">开启新对话</div>
       </div>
     </button>
-    <section class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3  bg-orange-50 rounded-lg shadow-lg">
+    <section class="card py-3 flex-1 flex flex-col h-full overflow-y-scroll px-3 bg-orange-50 rounded-lg shadow-lg">
       <HistoryButton
         v-for="(session, index) in sessions"
         class="w-full pl-3 duration-300 rounded-md shadow-sm my-1 py-4 text-lg"
-        :style="{ background: index == currentIndex ? '#aaa69d' :'' ,color: index === currentIndex ? '#f7f1e3': ''}"
+        :style="{ background: index == currentIndex ? '#aaa69d' : '', color: index === currentIndex ? '#f7f1e3' : '' }"
         @click="switchSession(index)">
         <template #title> 会话{{ index + 1 }} </template>
         <template #time>
@@ -30,7 +30,7 @@
         <span class="el-dropdown-link w-full flex items-center">
           <el-avatar :size="40" src="/images/user.png" />
           <div class="ml-3">
-            {{ name || email || 'user' }}
+            {{ info.name || info.email || 'user' }}
           </div>
         </span>
         <template #dropdown>
@@ -48,28 +48,19 @@ import sessionStore from '@/store/sessionStore'
 import { logout } from '@/utils/user'
 import { DeleteThree, Newlybuild } from '@icon-park/vue-next'
 import HistoryButton from './historyButton.vue'
-const currentIndex = ref(await sessionStore().getSessionIndex())
-// const currentIndex = await computed(() => sessionStore().getSessionIndex()).value
-watch(await sessionStore(), async () => {
-  currentIndex.value = await sessionStore().getSessionIndex()
-console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
-console.log(currentIndex.value)
-console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
+import userStore from '@/store/userStore'
+import { UserType } from '@/apis/user'
+const info = ref<UserType>({ name: '', email: '', id: 0, permissions: [] })
+onMounted(() => {
+  info.value = userStore().getUserInfo()
 })
+
+const currentIndex = ref(await sessionStore().getSessionIndex())
+watch(await sessionStore(), async () => (currentIndex.value = await sessionStore().getSessionIndex()))
 const sessions = ref(await sessionStore().getSessions())
-const name = ref('test')
-const email = ref('test@qq.com')
 const createSession = async () => {
   sessionStore().createSession([])
 }
-// await getCurrentUser().then((r: User | undefined) => {
-//   console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
-//   console.log(r)
-//   console.log('🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹')
-//   name.value = r!.name;
-//   email.value = r!.email;
-// });
-
 const switchSession = async (index: number) => {
   const session = sessionStore()
   const storeIndex = await session.setSessionIndex(index)

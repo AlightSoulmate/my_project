@@ -4,7 +4,6 @@ import routes from './routes'
 import guard from './guard'
 import userStore from '../store/userStore'
 import autoload from './autoload'
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [...routes],

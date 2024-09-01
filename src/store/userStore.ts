@@ -5,16 +5,26 @@ import { defineStore } from 'pinia'
 export default defineStore('user', {
   state: () => {
     return {
-      info: {} as null | UserType,
+      info: {} as UserType,
     }
   },
   actions: {
-    async getUserInfo() {
+    getUserInfo() {
+      return this.info
+    },
+    setUserInfo(info: UserType) {
       if (store.get(CacheEnum.TOKEN_NAME)) {
-        const res = await getCurrentUser() as any
-        this.info = res
+        this.info = info
       }
     },
+    resetUserInfo() {
+      this.info = {
+        id: 0,
+        name: "default",
+        email: "default@eamil.com",
+        permissions: ["student"]
+      }
+    }
   },
   persist: true
 })

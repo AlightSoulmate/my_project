@@ -1,4 +1,4 @@
-import { login, UserLoginType } from '@/apis/user';
+import { getCurrentUser, login, UserLoginType } from '@/apis/user';
 import router from '@/router';
 import sessionStore from '@/store/sessionStore';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -16,7 +16,7 @@ export async function loginWrap(values: UserLoginType) {
       store.set(CacheEnum.REDIRECT_ROUTE_NAME, "rag")
     }
     const routeName = store.get(CacheEnum.REDIRECT_ROUTE_NAME) ?? 'home'
-    userStore().getUserInfo()
+    userStore().setUserInfo(await getCurrentUser().then(res => res))
     router.push({ name: routeName })
   }
 }
@@ -38,7 +38,7 @@ export function logout() {
       setTimeout(() => {
         store.remove(CacheEnum.TOKEN_NAME)
         sessionStore().clearAllSession()
-        userStore().info = null
+        userStore().resetUserInfo()
         router.push('/login')
       }, 3000)
     })
@@ -47,10 +47,16 @@ export function logout_force() {
   setTimeout(() => {
     store.remove(CacheEnum.TOKEN_NAME)
     sessionStore().clearAllSession()
-    userStore().info = null
+    userStore().resetUserInfo()
     router.push('/login')
   }, 3000)
 }
 export function isLogin() {
   return Boolean(store.get(CacheEnum.TOKEN_NAME))
+}
+
+export function backToHomepage() {
+  setTimeout(()=>{
+   router.push('/')
+  })
 }

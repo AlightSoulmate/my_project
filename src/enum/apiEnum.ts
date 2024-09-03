@@ -5,8 +5,9 @@ export enum apiEnum {
   GET_CURRENT_USER = "/api/base/current",
   LLM_CHAT = "/api/llm/chat",
   RAG_CHAT = "/api/rag/chat",
-  UPLOAD_DOCUMENT = '/rag/upload_single',
 
+  UPLOAD_DOCUMENT = '/api/vector_store/upload_single',
+  
   DATABASE_GET = "/api/vector_store/database/get",
   DATABASE_CREATE = "/api/vector_store/database/create",
   DATABASE_GET_ALL = "/api/vector_store/databases",

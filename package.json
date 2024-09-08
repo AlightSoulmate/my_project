@@ -24,7 +24,7 @@
     "dotenv": "^16.4.5",
     "echarts": "^5.4.1",
     "element-china-area-data": "^6.1.0",
-    "element-plus": "^2.2.28",
+    "element-plus": "^2.8.2",
     "gsap": "^3.11.4",
     "highlight.js": "^11.9.0",
     "lodash": "^4.17.21",

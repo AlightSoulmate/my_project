@@ -28,6 +28,7 @@
 import Error from '@/components/y/error.vue'
 import v from '../../plugins/validate'
 import { loginWrap } from '../../utils/user'
+import router from '@/router'
 const { useForm, useFields, yup } = v
 
 const schema = yup.object({
@@ -44,9 +45,10 @@ const { handleSubmit, values, errors, validate } = useForm({
 
 useFields(Object.keys(schema))
 const onSubmit = handleSubmit(async (values: any) => {
-  loginWrap(values).then((r) => {
-    console.log('r', r)
-  })
+  router.push({ name: 'rag' })
+  // loginWrap(values).then((r) => {
+  //   console.log('r', r)
+  // })
 })
 </script>
 

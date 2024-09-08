@@ -16,6 +16,6 @@ export function getDatabases() {
 
 export function createDatabase(data:CreateDatabaseType) {
   return fetch(apiEnum.DATABASE_CREATE, {
-    body: JSON.stringify(data)
+    body: JSON.stringify({data})
   })
 }

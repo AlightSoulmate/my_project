@@ -18,7 +18,7 @@ export function getCollections() {
 
 export function createCollection(data: CreateCollectionType) {
   return fetch(apiEnum.COLLECTION_CREATE, {
-   body: JSON.stringify(data) // 发送创建集合所需的数据
+   body: JSON.stringify({data}) // 发送创建集合所需的数据
   })
 }
 

@@ -3,8 +3,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router, { setupRouter } from '@/router'
 import { setupPlugins } from './plugins'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
 import './styles/global.scss'
 import 'animate.css'
 async function bootstrap() {
@@ -13,6 +13,6 @@ async function bootstrap() {
   setupRouter(app)
   await router.isReady()
   app.mount('#app')
-  app.use(ElementPlus)
+  // app.use(ElementPlus)
 }
 bootstrap()
